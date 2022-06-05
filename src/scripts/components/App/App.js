@@ -1,29 +1,31 @@
 import React from "react";
-import { Route, Switch, Redirect, useHistory } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 import Main from "../Main/Main";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
-import CurrentUserContext from "../../contexts/CurrentUserContext";
-import AppContext from "../../contexts/CurrentUserContext";
-import ProtectedRoute from "./ProtectedRoute";
+import CurrentUserContext from "../../../contexts/CurrentUserContext";
+import AppContext from "../../../contexts/AppContext";
+import './App.css'
+//import ProtectedRoute from "./ProtectedRoute";
 
 const App = () => {
-  const history = useHistory();
-  const [currentUser, setCurrentUser] = React.useState([]);
-  const [loggining, setLoggining] = React.useState({ loggedIn: false});
-  const [email, setEmail] = React.useState(null);
-  const [name, setName] = React.useState(null);
+  //const history = useHistory();
+  //const [currentUser, setCurrentUser] = React.useState([]);
+  const [loggining, setLoggining] = React.useState({ loggedIn: true});
+  //const [email, setEmail] = React.useState('myemail@yandex.ru');
+  //const [name, setName] = React.useState('Lyudmila');
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
-      <AppContext.Provider value={{loggedIn: loggining.loggedIn, email: email}}>
+    <CurrentUserContext.Provider>
+      <AppContext.Provider>
         <div className="page">
           <Header />
           <Switch>
-          <ProtectedRoute path="/cards" >
-            <Main />
-          </ProtectedRoute>
+            <Route path="/movies">
+              <Main />
+            </Route>
             <Route path="/sign-up">
               <Register />
             </Route>
@@ -34,6 +36,7 @@ const App = () => {
               {loggining.loggedIn ? <Redirect to="/movies" /> : <Redirect to="/sign-in" />}
             </Route>
           </Switch>
+          <Footer />
         </div>
       </AppContext.Provider>
     </CurrentUserContext.Provider>
