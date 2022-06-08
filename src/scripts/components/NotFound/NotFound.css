@@ -49,11 +49,6 @@
 }
 
 @media (max-width: 768px) {
-  .page-not-found__button {
-    margin-bottom: 30px;
-    font-size: 12px;
-    line-height: 15px;
-  }
 
   .not-found__title {
     font-size: 80px;

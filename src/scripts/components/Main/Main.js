@@ -7,14 +7,14 @@ import AboutMe from "../AboutMe/AboutMe";
 import Portfolio from "../Portfolio/Portfolio";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
+import "./Main.css";
 
 function Main() {
   return (
     <>
       <Header />
-      <main className="">
+      <main className="main page__main">
         <Promo />
-        <NavTab />
         <AboutProject />
         <Techs />
         <AboutMe />
