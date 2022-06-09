@@ -1,7 +1,12 @@
-.promo {
+.page__promo {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.promo__container {
+  margin: 0 20px;
   background: #f5f5f5;
   border-radius: 10px;
-  margin: 0 20px;
 }
 
 .promo__title {
@@ -25,10 +30,8 @@
 }
 
 @media (max-width: 500px) {
-  .promo {
-    background: #f5f5f5;
-    border-radius: 10px;
-    margin: 0 14px;
+  .promo__container {
+    margin: 0 18px;
   }
 
   .promo__title {

@@ -1,5 +1,11 @@
 .about-project {
-  margin: 0 30px;
+  padding: 110px 50px;
+  box-sizing: border-box;
+}
+
+.page__about-project {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .about-project__article {
@@ -62,6 +68,10 @@
 }
 
 @media (max-width: 768px) {
+  .about-project {
+    padding: 90px 50px;
+  }
+
   .about-project__section-title {
     margin-bottom:22px;
   }
@@ -79,6 +89,10 @@
 }
 
 @media (max-width: 500px) {
+  .about-project {
+    padding: 70px 18px;
+  }
+
   .about-project__article {
     display: flex;
     flex-direction: column;

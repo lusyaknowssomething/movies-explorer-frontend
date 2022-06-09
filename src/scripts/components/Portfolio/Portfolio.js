@@ -3,9 +3,12 @@ import React from "react";
 function Portfolio() {
 
   return (
-    <header className="">
-      <h1>Portfolio</h1>
-    </header>
+    <section>
+
+      <article>
+        <h3 className="portfolio">Портфолио</h3>
+      </article>
+    </section>
   );
 };
 
