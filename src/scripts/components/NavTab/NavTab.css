@@ -26,6 +26,11 @@
   color: #FFFFFF;
   text-decoration: none;
   cursor: pointer;
+  transition: color .7s;
+}
+
+.nav-tab__link:hover {
+  color: #a1a1a1;
 }
 
 @media (max-width: 400px) {
