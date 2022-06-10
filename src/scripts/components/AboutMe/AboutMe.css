@@ -94,7 +94,6 @@
 @media (max-width: 768px) {
   .about-me {
     padding: 90px 50px;
-    box-sizing: border-box;
   }
 
   .about-me__article {

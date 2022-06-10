@@ -24,7 +24,12 @@ function AboutMe() {
         </p>
         <ul className="social-media__list">
           <li className="social-media__item">
-            <a href="https://t.me/ytvlnv" className="social-media__link">
+            <a
+              href="https://t.me/ytvlnv"
+              className="social-media__link"
+              target="_blank"
+              rel="noreferrer"
+            >
               Telegram
             </a>
           </li>
@@ -32,6 +37,8 @@ function AboutMe() {
             <a
               className="social-media__link"
               href="https://github.com/lusyaknowssomething"
+              target="_blank"
+              rel="noreferrer"
             >
               Github
             </a>

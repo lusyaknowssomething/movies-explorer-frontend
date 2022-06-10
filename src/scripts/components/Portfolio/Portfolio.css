@@ -3,13 +3,12 @@
   box-sizing: border-box;
 }
 
-.portfolio__page {
+.page__portfolio {
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .portfolio__title {
-  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -19,6 +18,7 @@
 }
 
 .portfolio__list {
+  margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
