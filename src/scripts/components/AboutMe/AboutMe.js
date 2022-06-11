@@ -5,7 +5,7 @@ import StudentPic from "../../../images/Lyudmila.jpg";
 
 function AboutMe() {
   return (
-    <section className="about-me page__about-me">
+    <section className="about-me page__about-me" id="student">
       <SectionTitle>Студентка</SectionTitle>
       <article className="about-me__article">
         <h3 className="about-me__title">Людмила</h3>
