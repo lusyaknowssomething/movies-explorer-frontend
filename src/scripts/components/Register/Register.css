@@ -143,3 +143,56 @@
 .register__login-link:hover {
   opacity: .8;
 }
+
+@media (max-width: 768px) {
+
+  .page__register {
+    max-width: 396px;
+    margin: 0 auto;
+  }
+
+  .register__main-link {
+    margin-top: 232px;
+  }
+
+  .register__btn-container {
+    margin: 40px 0 232px;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .register__main-link {
+    align-self: center;
+    margin-top: 56px;
+  }
+
+  .register__title {
+    align-self: center;
+    margin: 50px 0 80px;
+  }
+
+  .register__btn-container {
+    gap: 14px;
+    margin: 30px 0 30px;
+  }
+
+  .register__button {
+    font-size: 12px;
+    line-height: 15px;
+    padding: 15px 0 15px;
+  }
+  .register__signin {
+    gap: 7px;
+  }
+
+  .register__text {
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .register__login-link {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}

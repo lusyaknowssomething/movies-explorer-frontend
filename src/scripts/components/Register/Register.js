@@ -1,7 +1,7 @@
 import React from "react";
 import "./Register.css";
 import { Link } from "react-router-dom";
-import Logo from "../../../images/logo.svg"
+import Logo from "../../../images/logo.svg";
 
 function Register() {
   const [state, setState] = React.useState({
