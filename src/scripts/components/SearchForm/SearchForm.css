@@ -6,17 +6,16 @@
 .search {
   display: grid;
   align-items: center;
-  background: #F9F9F9;
+  background: #f9f9f9;
   border-radius: 9px;
   grid-template-columns: 1fr 226px;
   padding: 16px 0;
   position: relative;
 }
 
-
 .search__form {
   display: grid;
-  grid-template-columns: 77px 1fr 64px 1px;
+  grid-template-columns: 63px 1fr 64px 1px;
   align-items: center;
 }
 
@@ -25,7 +24,7 @@
   display: block;
   width: 1px;
   height: 40px;
-  background: #E8E8E8;
+  background: #e8e8e8;
 }
 
 .search__input {
@@ -33,6 +32,9 @@
   height: 22px;
   background: transparent;
   outline: none;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
 }
 
 .search__form::before {
@@ -42,7 +44,7 @@
   background: url(../../../images/search.svg) no-repeat center;
   width: 22px;
   height: 22px;
-  justify-self: center;
+  margin-left: 25px;
 }
 
 .search__button {
@@ -83,7 +85,7 @@
   width: 100%;
   bottom: -69px;
   left: 0;
-  background: #E8E8E8;
+  background: #e8e8e8;
 }
 
 .switcher__button {
@@ -112,7 +114,7 @@
   transition: 0.4s;
 }
 
-.switcher__checkbox:checked +.switcher__button>.switcher__circle {
+.switcher__checkbox:checked + .switcher__button > .switcher__circle {
   left: 18px;
 }
 
@@ -127,4 +129,82 @@
   line-height: 18px;
   margin: 0;
   justify-self: center;
+}
+
+@media (max-width: 768px) {
+  .page__search {
+    margin: 80px 0 120px;
+  }
+  .search {
+    grid-template-columns: 1fr 207px;
+  }
+
+  .search__form {
+    grid-template-columns: 77px 1fr 53px 1px;
+  }
+
+  .switcher {
+    gap: 15px;
+    margin-left: 19px;
+  }
+
+  .switcher::after {
+    bottom: -109px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page__search {
+    margin: 80px 0 55px;
+  }
+
+  .search {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    gap: 45px;
+    padding: 0;
+  }
+
+  .search__form {
+    display: grid;
+    grid-template-columns: 1fr 50px;
+    align-items: center;
+    width: 100%;
+    background: #f9f9f9;
+    border-radius: 9px;
+    padding: 25px 19px;
+    box-sizing: border-box;
+  }
+
+  .search__form::after {
+    content: "";
+    display: none;
+  }
+
+  .search__input {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .search__form::before {
+    display: none;
+  }
+
+  .search__button {
+    justify-self: flex-end;
+  }
+
+  .switcher {
+    gap: 13px;
+    margin-left: 0;
+  }
+
+  .switcher::after {
+    bottom: -44px;
+  }
+
+  .switcher__text {
+    font-size: 11px;
+  }
 }

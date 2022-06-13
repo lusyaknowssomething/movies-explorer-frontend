@@ -16,8 +16,8 @@ const App = () => {
   //const history = useHistory();
   //const [currentUser, setCurrentUser] = React.useState([]);
   const [loggining, setLoggining] = React.useState({ loggedIn: true});
-  //const [email, setEmail] = React.useState('myemail@yandex.ru');
-  //const [name, setName] = React.useState('Lyudmila');
+  const [email, setEmail] = React.useState('myemail@yandex.ru');
+  const [name, setName] = React.useState('Людмила');
 
   return (
     <CurrentUserContext.Provider>
@@ -31,7 +31,7 @@ const App = () => {
               <Movies />
             </Route>
             <Route path="/profile">
-              <Profile />
+              <Profile email={email} name={name} />
             </Route>
             <Route path="/saved-movies">
               <SavedMovies />

@@ -8,6 +8,7 @@
     "time btn"
     "picture picture";
   grid-template-columns: minmax(auto, 280px) 1fr;
+  column-gap: 20px;
 }
 
 .element__title {
@@ -17,6 +18,9 @@
   font-size: 15px;
   line-height: 18px;
   margin: 14px 0 9px 14px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .element__time {

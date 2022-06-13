@@ -9,7 +9,7 @@
   row-gap: 30px;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .cards-list__container {
     grid-template-columns: repeat(2, 1fr);
   }

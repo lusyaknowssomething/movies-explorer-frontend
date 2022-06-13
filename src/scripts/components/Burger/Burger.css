@@ -1,5 +1,6 @@
 .burger-menu {
   display: none;
+  z-index: 10;
 }
 
 .burger-menu_open {

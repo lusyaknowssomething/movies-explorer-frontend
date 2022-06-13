@@ -15,8 +15,8 @@ function MoviesCard({ name, time, img}) {
       <h2 className="element__title">{name}</h2>
       <p className="element__time">{time}</p>
       <button
-          type="button"
-          className={cardLikeButtonClassName}
+        type="button"
+        className={cardLikeButtonClassName}
       ></button>
       <div className="element__pic-container">
         <img
