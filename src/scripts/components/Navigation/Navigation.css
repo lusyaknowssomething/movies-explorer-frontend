@@ -126,3 +126,18 @@
     display: block;
   }
 }
+
+@media (max-width: 500px) {
+  .navigation__burger-btn {
+    right: 14px;
+  }
+
+  .navigation__auth {
+    gap: 14px;
+  }
+
+  .navigation__auth-link {
+    font-size: 10px;
+    line-height: 16px;
+  }
+}

@@ -15,18 +15,18 @@ function Profile({ email, name }) {
       [name]: value,
     }));
   };
+
   return (
     <>
       <Header />
       <main className="profile page__profile">
-        <section className="profile__section" aria-label="Блок с карточками">
+        <section className="profile__section">
           <h1 className="profile__title">{`Привет, ${name}!`}</h1>
           <form className="profile__form">
             <label className="profile__label">
               Имя
               <input
                 className="profile__input"
-                placeholder="Name"
                 name="name"
                 type="text"
                 value={state.name}
@@ -37,7 +37,6 @@ function Profile({ email, name }) {
               E-mail
               <input
                 className="profile__input"
-                placeholder="Email"
                 name="email"
                 type="email"
                 value={state.email}

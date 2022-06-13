@@ -1,0 +1,145 @@
+.register {
+  padding: 0 30px;
+}
+
+.page__register {
+  max-width: 410px;
+  margin: 0 auto;
+}
+
+.register__section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
+
+.register__main-link {
+  align-self: flex-start;
+  margin-top: 70px;
+  width: 38px;
+  height: 38px;
+}
+
+.register__logo {
+  width: 100%;
+  height: 100%;
+}
+
+.register__title {
+  align-self: flex-start;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  margin: 40px 0 40px;
+}
+
+.register__form {
+  display: grid;
+  height: 100%;
+  width: 100%;
+}
+
+.register__form_type_register {
+  grid-template-rows: auto auto auto 1fr;
+}
+
+.register__form_type_login {
+  grid-template-rows: auto auto 1fr;
+}
+
+.register__label {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #a0a0a0;
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.register__input {
+  width: 100%;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  background-color: transparent;
+  border: 0;
+  outline: none;
+  padding: 0;
+  border-bottom: solid 1px #e8e8e8;
+  padding-bottom: 10px;
+}
+
+.register__input:focus {
+  border-bottom: solid 1px #3456f3;
+}
+
+.register__btn-container {
+  display: grid;
+  gap: 16px;
+  align-self: flex-end;
+  margin: 40px 0 70px;
+}
+
+.register__button {
+  width: 100%;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  align-self: center;
+  background: #3456f3;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  opacity: 1;
+  transition: 0.4s;
+  text-align: center;
+  color: #ffffff;
+  padding: 13px 0 15px;
+}
+
+.register__button:hover {
+  opacity: .9;
+}
+
+.register__button:active {
+  transform: scale(0.95, 0.95);
+}
+
+.register__signin {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.register__text {
+  margin: 0;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #a0a0a0;
+}
+
+.register__login-link {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #3456F3;
+  text-decoration: none;
+  opacity: 1;
+  transition: 0.4s;
+}
+
+.register__login-link:hover {
+  opacity: .8;
+}

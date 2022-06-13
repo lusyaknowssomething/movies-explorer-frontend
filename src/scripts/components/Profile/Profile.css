@@ -87,3 +87,65 @@
  opacity: .7;
 }
 
+@media (max-width: 500px) {
+  .profile {
+    padding: 0 30px;
+    height: calc(100vh - 97px);
+  }
+
+  .profile__section {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+  }
+
+  .profile__title {
+    margin: 70px 0 80px;
+  }
+
+  .profile__form {
+    max-width: 260px;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+  }
+
+  .profile__label {
+    grid-template-columns: 50px 1fr;
+  }
+
+  .profile__label:first-child::after {
+    width: 260px;
+  }
+
+  .profile__btn-container {
+    display: flex;
+    flex-direction: column;
+    margin: 40px 0 40px;
+    gap: 16px;
+    align-self: flex-end;
+  }
+
+  .profile__button {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    align-self: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    opacity: 1;
+    transition: 0.4s;
+  }
+
+  .profile__button_exit {
+    color: #FF3055;
+  }
+
+  .profile__button:hover {
+   opacity: .7;
+  }
+}
