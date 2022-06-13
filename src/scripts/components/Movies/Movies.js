@@ -85,7 +85,7 @@ function Movies() {
   const [isLoading, setIsLoading] = React.useState(false);
 
   return (
-    <>
+    <div className="container">
       <Header />
       <main className="movies page__movies">
         <SearchForm />
@@ -101,7 +101,7 @@ function Movies() {
         )}
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

@@ -5,10 +5,12 @@
 .page__saved-movies {
   max-width: 1140px;
   margin: 0 auto;
+  min-height: calc(100vh - 144px - 172px);
 }
 
 @media (max-width: 500px) {
   .saved-movies {
     padding: 0 10px;
+    min-height: calc(100vh - 97px - 80px - 220px);
   }
 }

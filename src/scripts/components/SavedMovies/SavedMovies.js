@@ -28,10 +28,10 @@ function SavedMovies() {
     },
   ];
 
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   return (
-    <>
+    <div className="container">
       <Header />
       <main className="saved-movies page__saved-movies">
         <SearchForm />
@@ -44,7 +44,7 @@ function SavedMovies() {
         )}
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

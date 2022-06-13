@@ -1,3 +1,7 @@
+.container {
+  min-height: 100vh;
+}
+
 .movies {
   padding: 0 30px;
   display: flex;
@@ -7,6 +11,7 @@
 .page__movies {
   max-width: 1140px;
   margin: 0 auto;
+  min-height: calc(100vh - 144px - 172px);
 }
 
 .movies__btn {
@@ -22,6 +27,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: .4s;
+  margin-top: 50px;
 }
 
 .movies__btn:hover {
@@ -37,5 +43,6 @@
 @media (max-width: 500px) {
   .movies {
     padding: 0 10px;
+    min-height: calc(100vh - 97px - 80px - 220px);
   }
 }
