@@ -1,10 +1,9 @@
 .footer {
-  padding: 0 50px;
-  box-sizing: border-box;
+  padding: 0 30px;
 }
 
 .page__footer {
-  max-width: 1200px;
+  max-width: 1140px;
   margin: 0 auto;
 }
 
