@@ -15,7 +15,7 @@ import './App.css';
 const App = () => {
   //const history = useHistory();
   //const [currentUser, setCurrentUser] = React.useState([]);
-  const [loggining, setLoggining] = React.useState({ loggedIn: false});
+  const [loggining, setLoggining] = React.useState({ loggedIn: true});
   const [email, setEmail] = React.useState('myemail@yandex.ru');
   const [name, setName] = React.useState('Людмила');
 
