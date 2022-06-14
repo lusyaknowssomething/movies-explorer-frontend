@@ -10,32 +10,59 @@ import Login from "../Login/Login";
 import CurrentUserContext from "../../../contexts/CurrentUserContext";
 import AppContext from "../../../contexts/AppContext";
 import './App.css';
-//import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import mainApi from '../../utils/MainApi';
+import moviesApi from '../../utils/MoviesApi';
+import * as auth from "../../utils/auth"
 
 const App = () => {
-  //const history = useHistory();
-  //const [currentUser, setCurrentUser] = React.useState([]);
-  const [loggining, setLoggining] = React.useState({ loggedIn: true});
+
+  const [currentUser, setCurrentUser] = React.useState([]);
+  const [movies, setMovies] = React.useState([]);
+  const [loggining, setLoggining] = React.useState({ loggedIn: false});
+  const token = localStorage.getItem('token');
   const [email, setEmail] = React.useState('myemail@yandex.ru');
   const [name, setName] = React.useState('Людмила');
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  function tokenCheck() {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    auth
+      .checkToken(token)
+      .then((res) => {
+        if (!res) return;
+        setEmail(res.email);
+        setName(res.name);
+        setLoggining({
+          loggedIn: true
+        });
+        //history.push("/cards");
+      })
+      .catch((res) => console.log(res));
+  }
+
+  React.useEffect(() => {
+    tokenCheck();
+  }, []);
 
   return (
-    <CurrentUserContext.Provider>
-      <AppContext.Provider value={{loggedIn: loggining.loggedIn}}>
+    <CurrentUserContext.Provider value={currentUser}>
+      <AppContext.Provider value={{loggedIn: loggining.loggedIn, email: email, name: name}}>
         <div className="page">
           <Switch>
             <Route exact path="/">
               <Main />
             </Route>
-            <Route path="/movies">
+            <ProtectedRoute path="/movies">
               <Movies />
-            </Route>
-            <Route path="/profile">
+            </ProtectedRoute>
+            <ProtectedRoute path="/profile">
               <Profile email={email} name={name} />
-            </Route>
-            <Route path="/saved-movies">
+            </ProtectedRoute>
+            <ProtectedRoute path="/saved-movies">
               <SavedMovies />
-            </Route>
+            </ProtectedRoute>
             <Route path="/sign-up">
               <Register />
             </Route>
