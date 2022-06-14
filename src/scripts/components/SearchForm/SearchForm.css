@@ -35,6 +35,11 @@
   font-weight: 400;
   font-size: 18px;
   line-height: 20px;
+  margin-right: 30px;
+}
+
+.search__input:focus {
+  border-bottom: solid 1px #bababa;
 }
 
 .search__form::before {
@@ -185,6 +190,7 @@
   .search__input {
     font-size: 14px;
     line-height: 20px;
+    margin-right: 0;
   }
 
   .search__form::before {

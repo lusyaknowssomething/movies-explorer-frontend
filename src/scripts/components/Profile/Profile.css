@@ -50,6 +50,10 @@
   outline: none;
 }
 
+.profile__input:focus {
+  border-right: solid 2px #3456f3;
+}
+
 .profile__label:first-child::after {
   content: "";
   height: 1px;
