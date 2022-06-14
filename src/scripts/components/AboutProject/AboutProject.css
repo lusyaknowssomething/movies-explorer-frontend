@@ -1,0 +1,130 @@
+.about-project {
+  padding: 110px 50px;
+  box-sizing: border-box;
+}
+
+.page__about-project {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-project__article {
+  display: flex;
+  gap: 15px;
+}
+
+.about-project__section {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-project__section-title {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.04em;
+  margin: 70px 0 26px;
+}
+
+.about-project__section-text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  margin: 0;
+}
+
+.scale {
+  display: grid;
+  grid-template-columns: 25% 75%;
+  margin: 110px 0 110px;
+}
+
+.scale__section:first-child {
+  background: #2be080;
+}
+
+.scale__section:nth-child(2) {
+  background: #f2f2f2;
+}
+
+.scale__text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  margin: 9px 0;
+}
+
+.scale__under-text {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #A0A0A0;
+  margin: 14px 0 0;
+}
+
+@media (max-width: 768px) {
+  .about-project {
+    padding: 90px 50px;
+  }
+
+  .about-project__section-title {
+    margin-bottom:22px;
+  }
+  .about-project__section-text {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .nav-tab__link {
+    font-size: 10px;
+  }
+
+  .scale {
+    margin: 93px 0 90px;
+  }
+}
+
+@media (max-width: 500px) {
+  .about-project {
+    padding: 70px 18px;
+  }
+
+  .about-project__article {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+    margin-top: 60px;
+  }
+
+  .about-project__section-title {
+    font-size: 18px;
+    line-height: 22px;
+    margin: 0 0 16px;
+  }
+
+  .about-project__section-text {
+    margin: 0;
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .scale {
+   margin: 60px 0 70px;
+  }
+
+  .scale__text {
+    font-size: 11px;
+    line-height: 13px;
+    margin: 11px 0;
+  }
+
+  .scale__under-text {
+    font-size: 11px;
+    line-height: 13px;
+    margin: 10px 0 0;
+  }
+}

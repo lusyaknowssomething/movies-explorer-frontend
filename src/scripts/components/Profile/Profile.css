@@ -1,0 +1,155 @@
+.profile {
+  padding: 0 30px;
+}
+
+.page__profile {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+.profile__section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile__title {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  text-align: center;
+  margin: 74px 0 123px;
+}
+
+.profile__form {
+  max-width: 410px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.profile__label {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 13px;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 141px 1fr;
+}
+
+.profile__input {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 13px;
+  text-align: right;
+  background-color: transparent;
+  border: 0;
+  outline: none;
+}
+
+.profile__input:focus {
+  border-right: solid 2px #3456f3;
+}
+
+.profile__label:first-child::after {
+  content: "";
+  height: 1px;
+  width: 410px;
+  background: #e8e8e8;
+  display: block;
+  margin: 16px 0 17px;
+}
+
+.profile__btn-container {
+  display: flex;
+  flex-direction: column;
+  margin: 220px 0 70px;
+  gap: 16px;
+}
+
+.profile__button {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  align-self: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 1;
+  transition: 0.4s;
+}
+
+.profile__button_exit {
+  color: #FF3055;
+}
+
+.profile__button:hover {
+ opacity: .7;
+}
+
+@media (max-width: 500px) {
+  .profile {
+    padding: 0 30px;
+    height: calc(100vh - 97px);
+  }
+
+  .profile__section {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+  }
+
+  .profile__title {
+    margin: 70px 0 80px;
+  }
+
+  .profile__form {
+    max-width: 260px;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+  }
+
+  .profile__label {
+    grid-template-columns: 50px 1fr;
+  }
+
+  .profile__label:first-child::after {
+    width: 260px;
+  }
+
+  .profile__btn-container {
+    display: flex;
+    flex-direction: column;
+    margin: 40px 0 40px;
+    gap: 16px;
+    align-self: flex-end;
+  }
+
+  .profile__button {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    align-self: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    opacity: 1;
+    transition: 0.4s;
+  }
+
+  .profile__button_exit {
+    color: #FF3055;
+  }
+
+  .profile__button:hover {
+   opacity: .7;
+  }
+}

@@ -1,0 +1,143 @@
+.navigation {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
+.navigation_type_logged-in {
+  justify-content: space-between;
+}
+
+.navigation_type_logged-out {
+  justify-content: right;
+}
+
+.navigation__movies {
+  display: flex;
+  margin-left: 44px;
+  gap: 16px;
+}
+
+.navigation__auth {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.navigation__link {
+  color: #000;
+  text-decoration: none;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  opacity: 1;
+  transition: 0.4s;
+}
+
+.navigation__link:hover {
+  opacity: .7;
+}
+
+.navigation__profile-btn {
+  color: #000;
+  text-decoration: none;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  padding: 8px 20px;
+  background: #F9F9F9;
+  border-radius: 20px;
+  transition: 0.4s;
+}
+
+.navigation__profile-btn:hover {
+  background: #e6e6e6;
+}
+
+.navigation__profile-btn:active {
+  transform: scale(0.95, 0.95);
+}
+
+.navigation__auth-link {
+  color: #000;
+  text-decoration: none;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  transition: 0.4s;
+  opacity: 1;
+}
+
+.navigation__auth-link:hover {
+  opacity: .7;
+}
+
+.navigation__auth-link_btn {
+  padding: 8px 20px;
+  background: #2BE080;
+  border-radius: 3px;
+}
+
+.navigation__auth-link_btn:hover {
+  opacity: 1;
+  background: #25cb73;
+}
+
+.navigation__auth-link_btn:active {
+  transform: scale(0.95, 0.95);
+}
+
+.navigation__burger-btn {
+  display: none;
+  padding: 0;
+  height: 44px;
+  width: 44px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  opacity: 1;
+  transition: 0.4s;
+  position: absolute;
+  top: 15px;
+  right: 30px;
+}
+
+.navigation__burger-btn:hover {
+  opacity: 0.7;
+}
+
+.navigation__burger-btn:active {
+  transform: scale(0.95, 0.95);
+}
+
+@media (max-width: 768px) {
+  .navigation__profile-btn {
+    display: none;
+  }
+
+  .navigation__movies {
+    display: none;
+  }
+
+  .navigation__burger-btn {
+    display: block;
+  }
+}
+
+@media (max-width: 500px) {
+  .navigation__burger-btn {
+    right: 14px;
+  }
+
+  .navigation__auth {
+    gap: 14px;
+  }
+
+  .navigation__auth-link {
+    font-size: 10px;
+    line-height: 16px;
+  }
+}
