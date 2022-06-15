@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../../images/logo.svg";
+import * as auth from "../../utils/auth";
 
-function Login() {
+function Login({ handleLogin, handleInfoTooltip, setIsSuccsess }) {
   const [state, setState] = React.useState({
     name: "",
     email: "",
@@ -17,6 +18,30 @@ function Login() {
     }));
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { name, email, password } = state;
+    if (!name || !email || !password) {
+      return;
+    }
+    auth.authorize(name, email, password)
+    .then((data) => {
+      if (!data.token){
+        handleInfoTooltip(false);
+        setIsSuccsess(false)
+        return;
+      }
+
+      handleLogin(data.token, name, email);
+      setState({password: '', email: '', name: ''});
+    })
+    .catch((err) => {
+      handleInfoTooltip(true, false);
+      setIsSuccsess(false);
+      console.log(err)
+    });
+  }
+
   return (
     <main className="register page__register">
       <section className="register__section">
@@ -24,7 +49,7 @@ function Login() {
           <img className="register__logo" src={Logo} alt="logo icon" />
         </Link>
         <h1 className="register__title">Рады видеть!</h1>
-        <form className="register__form register__form_type_login">
+        <form className="register__form register__form_type_login" onSubmit={handleSubmit}>
           <label className="register__label">
             E-mail
             <input

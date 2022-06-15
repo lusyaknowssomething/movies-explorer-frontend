@@ -65,7 +65,7 @@ class Api {
 const token = localStorage.getItem('token');
 
 const api = new Api( {
-  url: 'https://api.lusya-movies-explorer.nomoredomains.xyz/',
+  url: 'https://api.lusya-movies-explorer.nomoredomains.xyz',
   headers: {
     'Authorization': `Bearer ${token}`,
     "content-type": "application/json"

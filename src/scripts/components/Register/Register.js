@@ -2,8 +2,9 @@ import React from "react";
 import "./Register.css";
 import { Link } from "react-router-dom";
 import Logo from "../../../images/logo.svg";
+import * as auth from "../../utils/auth";
 
-function Register() {
+function Register({ handleInfoTooltip, setIsSuccsess}) {
   const [state, setState] = React.useState({
     name: "",
     email: "",
@@ -18,6 +19,25 @@ function Register() {
     }));
   };
 
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('reg')
+    const { name, email, password } = state;
+    if(!name || !email || !password) return;
+    auth.register(name, email, password)
+      .then(()=> {
+        console.log('reg');
+        handleInfoTooltip(true);
+        setIsSuccsess(true)
+      })
+      .catch((err) => {
+        console.log(err)
+        handleInfoTooltip(false, true);
+        setIsSuccsess(false)
+      });
+  };
+
   return (
     <main className="register page__register">
       <section className="register__section">
@@ -25,7 +45,7 @@ function Register() {
           <img className="register__logo" src={Logo} alt="logo icon" />
         </Link>
         <h1 className="register__title">Добро пожаловать!</h1>
-        <form className="register__form register__form_type_register">
+        <form className="register__form register__form_type_register" onSubmit={handleSubmit}>
           <label className="register__label">
             Имя
             <input

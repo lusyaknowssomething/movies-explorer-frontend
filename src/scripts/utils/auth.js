@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://api.lusya-movies-explorer.nomoredomains.xyz/';
+export const BASE_URL = 'https://api.lusya-movies-explorer.nomoredomains.xyz';
 
 const request = ({url, method = 'POST', token, body}) => {
   const config = {
@@ -18,10 +18,10 @@ const request = ({url, method = 'POST', token, body}) => {
   })
 }
 
-export const register = (password, email) => {
+export const register = (name, email, password) => {
   return request({
     url: '/signup',
-    body: {password, email},
+    body: {name, email, password},
   });
 };
 
