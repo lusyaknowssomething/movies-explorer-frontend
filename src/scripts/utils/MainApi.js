@@ -25,7 +25,6 @@ class Api {
 
   //заменить данные пользователя (PATCH)
   patchUserData(data) {
-    console.log(token);
     return fetch(`${this._url}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
@@ -62,8 +61,6 @@ class Api {
   }
 
 }
-
-const token = localStorage.getItem('token');
 
 const api = new Api( {
   url: 'https://api.lusya-movies-explorer.nomoredomains.xyz',

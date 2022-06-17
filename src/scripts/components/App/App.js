@@ -24,10 +24,11 @@ const App = () => {
   const [email, setEmail] = React.useState(null);
   const [name, setName] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [filteredMovies, setFilteredMovies] = React.useState([])
+  const [filteredMovies, setFilteredMovies] = React.useState([]);
 
   const getMoviesFromBeatFilm = () => {
-    moviesApi.getMovies()
+    moviesApi
+      .getMovies()
       .then((movies) => {
         const moviesFromBeatFilm = movies.map((item) => {
           return {
@@ -43,8 +44,8 @@ const App = () => {
             nameRU: item.nameRU,
             nameEN: item.nameEN,
           };
-        })
-        localStorage.setItem('movies', JSON.stringify(moviesFromBeatFilm));
+        });
+        localStorage.setItem("movies", JSON.stringify(moviesFromBeatFilm));
         setMovies(moviesFromBeatFilm);
       })
       .catch((err) => console.log(err));
@@ -66,6 +67,32 @@ const App = () => {
     }
   }, [loggining]);
 
+  const handleSearchFilter = (searchQuery, data) => {
+    if (searchQuery) {
+      const search = searchQuery.toLowerCase();
+      const filterSearchQuery = (query) => {
+        return (
+          JSON.stringify(query.nameRU).toLowerCase().includes(search) ||
+          JSON.stringify(query.nameEN).toLowerCase().includes(search)
+        );
+      };
+
+      return data.filter(filterSearchQuery);
+    }
+  };
+
+  const handleSearchMovies = (searchQuery) => {
+    const moviesDataFromStorage = JSON.parse(localStorage.getItem("movies"));
+    if (moviesDataFromStorage) {
+      const filteredMovies = handleSearchFilter(
+        searchQuery,
+        moviesDataFromStorage
+      );
+      console.log(filteredMovies)
+      localStorage.setItem("filtered-movies", JSON.stringify(filteredMovies));
+    }
+  };
+
   function tokenCheck() {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -74,7 +101,6 @@ const App = () => {
       .then((res) => {
         if (!res) return;
         setCurrentUser(res);
-        console.log(res);
         setLoggining({
           loggedIn: true,
         });
@@ -111,13 +137,15 @@ const App = () => {
     history.push("/movies");
   }
 
-
-
   const [isSuccsess, setIsSuccsess] = React.useState(null);
 
   function handleInfoTooltip(historyPush, register) {
-    if(historyPush) {history.push("/sign-in")};
-    if(register) {setLoggining(false)};
+    if (historyPush) {
+      history.push("/sign-in");
+    }
+    if (register) {
+      setLoggining(false);
+    }
   }
 
   return (
@@ -131,7 +159,7 @@ const App = () => {
               <Main />
             </Route>
             <ProtectedRoute path="/movies">
-              <Movies />
+              <Movies onSearchMovies={handleSearchMovies} />
             </ProtectedRoute>
             <ProtectedRoute path="/profile">
               <Profile onUpdateUser={handleUpdateUser} />

@@ -18,7 +18,7 @@ import Img10 from "../../../images/img10.jpg";
 import Img11 from "../../../images/img11.jpg";
 import Img12 from "../../../images/img12.jpg";
 
-function Movies() {
+function Movies({ onSearchMovies }) {
   const MoviesData = [
     {
       name: "33 слова о дизайне",
@@ -88,7 +88,7 @@ function Movies() {
     <div className="container">
       <Header />
       <main className="movies page__movies">
-        <SearchForm />
+        <SearchForm onSearchMovies={onSearchMovies} />
         {isLoading ? (
           <Preloader />
         ) : (
