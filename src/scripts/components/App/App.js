@@ -93,7 +93,7 @@ const App = () => {
       .patchUserData(data)
       .then(() => {
         currentUser.name = data.name;
-        currentUser.about = data.about;
+        currentUser.email = data.email;
       })
       .catch((err) => {
         console.log(err); // выведем ошибку в консоль
@@ -134,7 +134,7 @@ const App = () => {
               <Movies />
             </ProtectedRoute>
             <ProtectedRoute path="/profile">
-              <Profile email={email} name={name} />
+              <Profile onUpdateUser={handleUpdateUser} />
             </ProtectedRoute>
             <ProtectedRoute path="/saved-movies">
               <SavedMovies />

@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
 import CurrentUserContext from "../../../contexts/CurrentUserContext";
 
-function Profile() {
+function Profile({ onUpdateUser }) {
   const history = useHistory();
   const value = React.useContext(AppContext);
   const currentUser = React.useContext(CurrentUserContext);
@@ -31,13 +31,23 @@ function Profile() {
     value.loggedIn = false;
   }
 
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    // Передаём значения управляемых компонентов во внешний обработчик
+    onUpdateUser({
+      name: state.name,
+      email: state.email,
+    });
+  }
+
   return (
     <>
       <Header />
       <main className="profile page__profile">
         <section className="profile__section">
           <h1 className="profile__title">{`Привет, ${currentUser.name}!`}</h1>
-          <form className="profile__form">
+          <form className="profile__form" onSubmit={handleSubmit}>
             <label className="profile__label">
               Имя
               <input
