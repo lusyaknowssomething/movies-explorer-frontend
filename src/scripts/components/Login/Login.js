@@ -2,12 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../../images/logo.svg";
 import * as auth from "../../utils/auth";
+import mainApi from "../../utils/MainApi";
 
 function Login({ handleLogin, handleInfoTooltip, setIsSuccsess }) {
   const [state, setState] = React.useState({
-    name: "",
-    email: "",
     password: "",
+    email: ""
   });
 
   const handleChange = (e) => {
@@ -20,23 +20,28 @@ function Login({ handleLogin, handleInfoTooltip, setIsSuccsess }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { name, email, password } = state;
-    if (!name || !email || !password) {
+    const { password, email } = state;
+    if (!email || !password) {
       return;
     }
-    auth.authorize(name, email, password)
+    auth.authorize(password, email)
     .then((data) => {
       if (!data.token){
         handleInfoTooltip(false);
         setIsSuccsess(false)
         return;
       }
-
-      handleLogin(data.token, name, email);
-      setState({password: '', email: '', name: ''});
+      setState({password: '', email: ''});
+      return data.token;
+    })
+    .then((token) => {
+      mainApi.getUserData(token)
+        .then((data) => {
+          handleLogin(token, data);
+        })
     })
     .catch((err) => {
-      handleInfoTooltip(true, false);
+      handleInfoTooltip(false);
       setIsSuccsess(false);
       console.log(err)
     });

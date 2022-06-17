@@ -1,11 +1,18 @@
 import React from "react";
 import Header from "../Header/Header";
 import "./Profile.css";
+import { useHistory } from "react-router-dom";
+import AppContext from "../../../contexts/AppContext";
+import CurrentUserContext from "../../../contexts/CurrentUserContext";
 
-function Profile({ email, name }) {
+function Profile() {
+  const history = useHistory();
+  const value = React.useContext(AppContext);
+  const currentUser = React.useContext(CurrentUserContext);
+
   const [state, setState] = React.useState({
-    name: name,
-    email: email,
+    name: currentUser.name,
+    email: currentUser.email,
   });
 
   const handleChange = (e) => {
@@ -16,12 +23,20 @@ function Profile({ email, name }) {
     }));
   };
 
+
+  function signOut(){
+    localStorage.removeItem('token');
+    localStorage.removeItem('movies');
+    history.push('/sign-in');
+    value.loggedIn = false;
+  }
+
   return (
     <>
       <Header />
       <main className="profile page__profile">
         <section className="profile__section">
-          <h1 className="profile__title">{`Привет, ${name}!`}</h1>
+          <h1 className="profile__title">{`Привет, ${currentUser.name}!`}</h1>
           <form className="profile__form">
             <label className="profile__label">
               Имя
@@ -50,6 +65,7 @@ function Profile({ email, name }) {
               <button
                 className="profile__button profile__button_exit"
                 type="button"
+                onClick={signOut}
               >
                 Выйти из аккаунта
               </button>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, Redirect, useHistory } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import Main from "../Main/Main";
@@ -21,9 +21,34 @@ const App = () => {
   const [movies, setMovies] = React.useState([]);
   const [loggining, setLoggining] = React.useState({ loggedIn: false });
   const token = localStorage.getItem("token");
-  const [email, setEmail] = React.useState("myemail@yandex.ru");
-  const [name, setName] = React.useState("Людмила");
+  const [email, setEmail] = React.useState(null);
+  const [name, setName] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [filteredMovies, setFilteredMovies] = React.useState([])
+
+  const getMoviesFromBeatFilm = () => {
+    moviesApi.getMovies()
+      .then((movies) => {
+        const moviesFromBeatFilm = movies.map((item) => {
+          return {
+            id: item.id,
+            country: item.country,
+            director: item.director,
+            duration: item.duration,
+            year: item.year,
+            description: item.description,
+            image: item.image.url,
+            trailerLink: item.trailerLink,
+            thumbnail: item.image.formats.thumbnail.url,
+            nameRU: item.nameRU,
+            nameEN: item.nameEN,
+          };
+        })
+        localStorage.setItem('movies', JSON.stringify(moviesFromBeatFilm));
+        setMovies(moviesFromBeatFilm);
+      })
+      .catch((err) => console.log(err));
+  };
 
   React.useEffect(() => {
     if (loggining) {
@@ -31,6 +56,9 @@ const App = () => {
         .getUserData(token)
         .then((user) => {
           setCurrentUser(user);
+          if (!localStorage.movies) {
+            getMoviesFromBeatFilm();
+          }
         })
         .catch((err) => {
           console.log(err); // выведем ошибку в консоль
@@ -45,12 +73,12 @@ const App = () => {
       .checkToken(token)
       .then((res) => {
         if (!res) return;
-        setEmail(res.email);
-        setName(res.name);
+        setCurrentUser(res);
+        console.log(res);
         setLoggining({
           loggedIn: true,
         });
-        //history.push("/movies");
+        history.push("/movies");
       })
       .catch((res) => console.log(res));
   }
@@ -59,19 +87,35 @@ const App = () => {
     tokenCheck();
   }, []);
 
-  function handleLogin(token, name, email) {
+  function handleUpdateUser(data) {
+    setIsLoading(true);
+    mainApi
+      .patchUserData(data)
+      .then(() => {
+        currentUser.name = data.name;
+        currentUser.about = data.about;
+      })
+      .catch((err) => {
+        console.log(err); // выведем ошибку в консоль
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
+  function handleLogin(token, data) {
     if (!token) return;
-    setEmail(email);
-    setName(name);
+    setCurrentUser(data);
     localStorage.setItem("token", token);
     setLoggining((old) => ({ ...old, loggedIn: true }));
     history.push("/movies");
   }
 
+
+
   const [isSuccsess, setIsSuccsess] = React.useState(null);
 
   function handleInfoTooltip(historyPush, register) {
-    if(historyPush) {console.log('push')};
     if(historyPush) {history.push("/sign-in")};
     if(register) {setLoggining(false)};
   }

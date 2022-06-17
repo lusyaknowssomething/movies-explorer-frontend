@@ -1,8 +1,14 @@
 import React from "react";
 import './SearchForm.css';
+import AppContext from "../../../contexts/AppContext";
 import FindSvg from "../../../images/find.svg";
+import moviesApi from "../../utils/MoviesApi";
+
 
 function SearchForm() {
+  const value = React.useContext(AppContext);
+
+
 
   return (
     <section className="search page__search">
