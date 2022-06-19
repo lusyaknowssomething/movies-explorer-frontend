@@ -4,8 +4,15 @@ import './MoviesCardList.css';
 
 function MoviesCardList({ moviesData }) {
 
-  const moviesCards = moviesData.map((item) => (
-    <MoviesCard name={item.name} time={item.time} img={item.img} />
+  const [movies, setMovies] = React.useState([]);
+
+  React.useEffect(() => {
+    setMovies(moviesData);
+    console.log(moviesData)
+  }, [moviesData]);
+
+  const moviesCards = movies.map((item) => (
+    <MoviesCard item={item} />
   ));
 
   return (

@@ -1,11 +1,15 @@
 import React from "react";
 import "./SearchForm.css";
 import FindSvg from "../../../images/find.svg";
+import { useLocation } from 'react-router-dom';
 
 function SearchForm({ onSearchMovies }) {
   const [state, setState] = React.useState({
     query: "",
   });
+
+  const location = useLocation();
+  const isSavedMovies = ['/saved-movies'].includes(location.pathname);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,7 +23,7 @@ function SearchForm({ onSearchMovies }) {
     e.preventDefault();
     const { query } = state;
     if(!query) return;
-    onSearchMovies(query);
+    onSearchMovies(query, isSavedMovies);
     setState({query: ""});
   };
 

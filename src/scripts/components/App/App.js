@@ -19,6 +19,7 @@ const App = () => {
   const history = useHistory();
   const [currentUser, setCurrentUser] = React.useState([]);
   const [movies, setMovies] = React.useState([]);
+  const [savedMovies, setSavedMovies] = React.useState([]);
   const [loggining, setLoggining] = React.useState({ loggedIn: false });
   const token = localStorage.getItem("token");
   const [email, setEmail] = React.useState(null);
@@ -38,7 +39,7 @@ const App = () => {
             duration: item.duration,
             year: item.year,
             description: item.description,
-            image: item.image.url,
+            image: `https://api.nomoreparties.co${item.image.url}`,
             trailerLink: item.trailerLink,
             thumbnail: item.image.formats.thumbnail.url,
             nameRU: item.nameRU,
@@ -47,6 +48,17 @@ const App = () => {
         });
         localStorage.setItem("movies", JSON.stringify(moviesFromBeatFilm));
         setMovies(moviesFromBeatFilm);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getSavedMovies = () => {
+    mainApi
+      .getMovies()
+      .then((movies) => {
+        const savedMovies = movies.map((item) => ({ ...item, id: item.movieId }));
+        setSavedMovies(savedMovies);
+        localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
       })
       .catch((err) => console.log(err));
   };
@@ -60,6 +72,9 @@ const App = () => {
           if (!localStorage.movies) {
             getMoviesFromBeatFilm();
           }
+          if (!localStorage.savedMovies) {
+            getSavedMovies();
+          }
         })
         .catch((err) => {
           console.log(err); // выведем ошибку в консоль
@@ -70,6 +85,7 @@ const App = () => {
   const handleSearchFilter = (searchQuery, data) => {
     if (searchQuery) {
       const search = searchQuery.toLowerCase();
+
       const filterSearchQuery = (query) => {
         return (
           JSON.stringify(query.nameRU).toLowerCase().includes(search) ||
@@ -81,15 +97,20 @@ const App = () => {
     }
   };
 
-  const handleSearchMovies = (searchQuery) => {
+  const handleSearchMovies = (searchQuery, isSavedMovies) => {
     const moviesDataFromStorage = JSON.parse(localStorage.getItem("movies"));
+    const savedMoviesDataFromStorage = JSON.parse(localStorage.getItem("savedMovies"));
+
     if (moviesDataFromStorage) {
-      const filteredMovies = handleSearchFilter(
-        searchQuery,
-        moviesDataFromStorage
-      );
-      console.log(filteredMovies)
-      localStorage.setItem("filtered-movies", JSON.stringify(filteredMovies));
+      if (!isSavedMovies) {
+        const filteredMovies = handleSearchFilter(searchQuery, moviesDataFromStorage);
+        //localStorage.setItem("filteredMovies", JSON.stringify(filteredMovies));
+        setFilteredMovies(filteredMovies);
+      } else {
+        console.log('Im here')
+        const filteredSavedMovies = handleSearchFilter(searchQuery, savedMoviesDataFromStorage);
+        console.log(filteredSavedMovies)
+      }
     }
   };
 
@@ -159,13 +180,13 @@ const App = () => {
               <Main />
             </Route>
             <ProtectedRoute path="/movies">
-              <Movies onSearchMovies={handleSearchMovies} />
+              <Movies movies={filteredMovies} onSearchMovies={handleSearchMovies} />
             </ProtectedRoute>
             <ProtectedRoute path="/profile">
               <Profile onUpdateUser={handleUpdateUser} />
             </ProtectedRoute>
             <ProtectedRoute path="/saved-movies">
-              <SavedMovies />
+              <SavedMovies savedMovies={savedMovies} onSearchMovies={handleSearchMovies} />
             </ProtectedRoute>
             <Route path="/sign-up">
               <Register

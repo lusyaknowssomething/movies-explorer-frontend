@@ -1,8 +1,21 @@
 import React from "react";
-import './MoviesCard.css';
-import { useLocation } from 'react-router-dom';
+import "./MoviesCard.css";
+import { useLocation } from "react-router-dom";
 
-function MoviesCard({ name, time, img}) {
+function MoviesCard({ item }) {
+  const {
+    id,
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    thumbnail,
+    nameRU,
+    nameEN,
+  } = item;
   // Определяем, сохранена ли карточка
   const isSaved = true;
 
@@ -12,34 +25,25 @@ function MoviesCard({ name, time, img}) {
   }`;
 
   const location = useLocation();
-  const savedMoviesPath = ['/saved-movies'].includes(location.pathname);
+  const savedMoviesPath = ["/saved-movies"].includes(location.pathname);
 
   return (
     <article className="element">
-      <h2 className="element__title">{name}</h2>
-      <p className="element__time">{time}</p>
+      <h2 className="element__title">{nameRU}</h2>
+      <p className="element__time">{duration}</p>
       {savedMoviesPath ? (
         <button
           type="button"
           className="element__btn element__btn_delete"
-        >
-        </button>
+        ></button>
       ) : (
-        <button
-          type="button"
-          className={cardLikeButtonClassName}
-        >
-        </button>
+        <button type="button" className={cardLikeButtonClassName}></button>
       )}
       <div className="element__pic-container">
-        <img
-          src={img}
-          alt={name}
-          className="element__picture"
-        />
+        <img src={image} alt={nameRU} className="element__picture" />
       </div>
     </article>
   );
-};
+}
 
 export default MoviesCard;
