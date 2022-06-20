@@ -48,6 +48,7 @@ const App = () => {
             nameEN: item.nameEN,
           };
         });
+
         localStorage.setItem("movies", JSON.stringify(moviesFromBeatFilm));
         setMovies(moviesFromBeatFilm);
       })
@@ -63,12 +64,11 @@ const App = () => {
     mainApi
       .getMovies()
       .then((movies) => {
-        const savedMovies = movies.map((item) => ({
-          ...item,
-          id: item.movieId,
-        }));
-        setSavedMovies(savedMovies);
-        localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+        const savedMoviesData = movies.data.map((item) => {
+          return {...item};
+        });
+        setSavedMovies(savedMoviesData);
+        localStorage.setItem("savedMovies", JSON.stringify(savedMoviesData));
       })
       .catch(() => {
         setGetMovieError(
@@ -76,6 +76,11 @@ const App = () => {
         );
       });
   };
+
+  // React.useEffect(() => {
+  //   setFilterSavedMovies(searchFilter(savedMovies, query));
+  //   localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
+  // }, [savedMovies]);
 
   React.useEffect(() => {
     if (loggining) {
@@ -94,7 +99,7 @@ const App = () => {
           console.log(err); // выведем ошибку в консоль
         });
     }
-  }, [loggining]);
+  }, [loggining, token, ]);
 
   const handleSearchFilter = (searchQuery, data) => {
     if (searchQuery) {
@@ -192,11 +197,13 @@ const App = () => {
   }
 
   const handleMovieDelete = (movie) => {
-     mainApi
-      .deleteMovie(movie.id)
+    mainApi
+      .deleteMovie(movie._id)
       .then((res) => {
         if (res) {
-          setSavedMovies(savedMovies.filter((i) => i.id !== res.movieId))
+          setSavedMovies(savedMovies.filter((i) => i.movieId !== res.movieId))
+          console.log(savedMovies);
+          localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
         }
       })
       .catch((err) => {
@@ -214,8 +221,9 @@ const App = () => {
       mainApi
         .postMovie(movie)
         .then((movie) => {
-          setSavedMovies([...savedMovies, { ...movie, id: movie.movieId }]);
-          console.log(savedMovies, 'done');
+          setSavedMovies([...savedMovies, movie]);
+          localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+          console.log(savedMovies);
         })
         .catch((err) => {
           console.log(err); // выведем ошибку в консоль
@@ -225,7 +233,6 @@ const App = () => {
         .postMovie(movie)
         .then((movie) => {
           setSavedMovies([...savedMovies, { ...movie, id: movie.movieId }]);
-          console.log(savedMovies, 'done');
         })
         .catch((err) => {
           console.log(err); // выведем ошибку в консоль
@@ -253,8 +260,8 @@ const App = () => {
                 likedMovies={savedMovies}
                 onSearchMovies={handleSearchMovies}
                 handleMovieLike={handleMovieLike}
-                onCardDelete={handleMovieDelete}
-                onDelete={handleDelete}
+                handleMovieDelete={handleMovieDelete}
+                handleDelete={handleDelete}
               />
             </ProtectedRoute>
             <ProtectedRoute path="/profile">
@@ -264,6 +271,8 @@ const App = () => {
               <SavedMovies
                 savedMovies={savedMovies}
                 onSearchMovies={handleSearchMovies}
+                handleMovieDelete={handleMovieDelete}
+                handleDelete={handleDelete}
               />
             </ProtectedRoute>
             <Route path="/sign-up">

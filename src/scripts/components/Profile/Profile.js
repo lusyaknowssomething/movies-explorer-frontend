@@ -27,6 +27,7 @@ function Profile({ onUpdateUser }) {
   function signOut(){
     localStorage.removeItem('token');
     localStorage.removeItem('movies');
+    localStorage.removeItem('savedMovies');
     history.push('/sign-in');
     value.loggedIn = false;
   }

@@ -33,11 +33,11 @@ class Api {
   }
 
   //получить список всех фильмов в виде массива (GET)
-  getMovies(token) {
+  getMovies() {
     return fetch(`${this._url}/movies`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': tokenForAuth,
         "content-type": "application/json"
       }
     }).then(this._errorHandler)
@@ -62,10 +62,12 @@ class Api {
 
 }
 
+const tokenForAuth = `Bearer ${localStorage.getItem('token')}`
+
 const api = new Api( {
   url: 'https://api.lusya-movies-explorer.nomoredomains.xyz',
   headers: {
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    'Authorization': tokenForAuth,
     "content-type": "application/json"
   }
 });

@@ -2,12 +2,13 @@ import React from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import './MoviesCardList.css';
 
-function MoviesCardList({ moviesData, likedMovies, handleMovieLike, onMovieDelete, onDelete }) {
+function MoviesCardList({ moviesData, likedMovies, handleMovieLike, handleMovieDelete, handleDelete }) {
 
   const [movies, setMovies] = React.useState([]);
 
   React.useEffect(() => {
     setMovies(moviesData);
+    console.log(moviesData)
   }, [moviesData]);
 
   const moviesCards = movies.map((item) => (
@@ -15,8 +16,8 @@ function MoviesCardList({ moviesData, likedMovies, handleMovieLike, onMovieDelet
       item={item}
       likedMovies={likedMovies}
       handleMovieLike={handleMovieLike}
-      onMovieDelete={onMovieDelete}
-      onDelete={onDelete}
+      handleMovieDelete={handleMovieDelete}
+      handleDelete={handleDelete}
     />
   ));
 

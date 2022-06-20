@@ -6,11 +6,11 @@ function MoviesCard({
   item,
   likedMovies,
   handleMovieLike,
-  onMovieDelete,
-  onDelete,
+  handleMovieDelete,
+  handleDelete,
 }) {
   const {
-    id,
+    //id,
     country,
     director,
     duration,
@@ -43,8 +43,8 @@ function MoviesCard({
   }
 
   function onDeleteClick() {
-    onDelete();
-    onMovieDelete(item);
+    handleDelete();
+    handleMovieDelete(item);
   }
 
   return (

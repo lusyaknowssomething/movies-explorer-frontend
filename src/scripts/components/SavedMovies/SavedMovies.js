@@ -6,21 +6,40 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import "./SavedMovies.css";
 import Preloader from "../Preloader/Preloader";
 
-function SavedMovies({onSearchMovies}) {
-
-
+function SavedMovies({
+  savedMovies,
+  onSearchMovies,
+  handleMovieDelete,
+  handleDelete,
+}) {
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const savedMoviesDataFromStorage = JSON.parse(
+    localStorage.getItem("savedMovies")
+  );
 
   return (
     <div className="container">
       <Header />
       <main className="saved-movies page__saved-movies">
-        <SearchForm  onSearchMovies={onSearchMovies}/>
+        <SearchForm onSearchMovies={onSearchMovies} />
         {isLoading ? (
           <Preloader />
         ) : (
           <>
-            <MoviesCardList moviesData={[]} />
+            {isLoading ? (
+              <MoviesCardList
+                moviesData={savedMovies}
+                handleMovieDelete={handleMovieDelete}
+                handleDelete={handleDelete}
+              />
+            ) : (
+              <MoviesCardList
+                moviesData={savedMoviesDataFromStorage}
+                handleMovieDelete={handleMovieDelete}
+                handleDelete={handleDelete}
+              />
+            )}
           </>
         )}
       </main>
