@@ -20,7 +20,7 @@ function SavedMovies({onSearchMovies}) {
           <Preloader />
         ) : (
           <>
-            <MoviesCardList moviesData={'hello'} />
+            <MoviesCardList moviesData={[]} />
           </>
         )}
       </main>

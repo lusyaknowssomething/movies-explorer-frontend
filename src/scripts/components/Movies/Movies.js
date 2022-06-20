@@ -6,7 +6,7 @@ import SearchForm from "../SearchForm/SearchForm";
 import Preloader from "../Preloader/Preloader";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 
-function Movies({ movies, onSearchMovies }) {
+function Movies({ movies, likedMovies, onSearchMovies, handleMovieLike, onMovieDelete, onDelete }) {
 
 
   const [isLoading, setIsLoading] = React.useState(false);
@@ -20,7 +20,13 @@ function Movies({ movies, onSearchMovies }) {
           <Preloader />
         ) : (
           <>
-            <MoviesCardList moviesData={movies} />
+            <MoviesCardList
+              moviesData={movies}
+              likedMovies={likedMovies}
+              handleMovieLike={handleMovieLike}
+              onMovieDelete={onMovieDelete}
+              onDelete={onDelete}
+            />
             <button type="button" className="movies__btn">
               Ещё
             </button>

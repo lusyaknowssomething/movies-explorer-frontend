@@ -2,17 +2,22 @@ import React from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import './MoviesCardList.css';
 
-function MoviesCardList({ moviesData }) {
+function MoviesCardList({ moviesData, likedMovies, handleMovieLike, onMovieDelete, onDelete }) {
 
   const [movies, setMovies] = React.useState([]);
 
   React.useEffect(() => {
     setMovies(moviesData);
-    console.log(moviesData)
   }, [moviesData]);
 
   const moviesCards = movies.map((item) => (
-    <MoviesCard item={item} />
+    <MoviesCard
+      item={item}
+      likedMovies={likedMovies}
+      handleMovieLike={handleMovieLike}
+      onMovieDelete={onMovieDelete}
+      onDelete={onDelete}
+    />
   ));
 
   return (

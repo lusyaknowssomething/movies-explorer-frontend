@@ -26,6 +26,8 @@ const App = () => {
   const [name, setName] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [filteredMovies, setFilteredMovies] = React.useState([]);
+  const [getMovieError, setGetMovieError] = React.useState(null);
+  const [startPreloader, setStartPreloader] = React.useState(false);
 
   const getMoviesFromBeatFilm = () => {
     moviesApi
@@ -33,7 +35,7 @@ const App = () => {
       .then((movies) => {
         const moviesFromBeatFilm = movies.map((item) => {
           return {
-            id: item.id,
+            movieId: item.id,
             country: item.country,
             director: item.director,
             duration: item.duration,
@@ -41,7 +43,7 @@ const App = () => {
             description: item.description,
             image: `https://api.nomoreparties.co${item.image.url}`,
             trailerLink: item.trailerLink,
-            thumbnail: item.image.formats.thumbnail.url,
+            thumbnail: `https://api.nomoreparties.co${item.image.formats.thumbnail.url}`,
             nameRU: item.nameRU,
             nameEN: item.nameEN,
           };
@@ -49,18 +51,30 @@ const App = () => {
         localStorage.setItem("movies", JSON.stringify(moviesFromBeatFilm));
         setMovies(moviesFromBeatFilm);
       })
-      .catch((err) => console.log(err));
+      .catch(() => {
+        setGetMovieError(
+          "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
+        );
+      });
   };
 
   const getSavedMovies = () => {
+    setStartPreloader(true);
     mainApi
       .getMovies()
       .then((movies) => {
-        const savedMovies = movies.map((item) => ({ ...item, id: item.movieId }));
+        const savedMovies = movies.map((item) => ({
+          ...item,
+          id: item.movieId,
+        }));
         setSavedMovies(savedMovies);
-        localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
+        localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
       })
-      .catch((err) => console.log(err));
+      .catch(() => {
+        setGetMovieError(
+          "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
+        );
+      });
   };
 
   React.useEffect(() => {
@@ -99,17 +113,25 @@ const App = () => {
 
   const handleSearchMovies = (searchQuery, isSavedMovies) => {
     const moviesDataFromStorage = JSON.parse(localStorage.getItem("movies"));
-    const savedMoviesDataFromStorage = JSON.parse(localStorage.getItem("savedMovies"));
+    const savedMoviesDataFromStorage = JSON.parse(
+      localStorage.getItem("savedMovies")
+    );
 
     if (moviesDataFromStorage) {
       if (!isSavedMovies) {
-        const filteredMovies = handleSearchFilter(searchQuery, moviesDataFromStorage);
+        const filteredMovies = handleSearchFilter(
+          searchQuery,
+          moviesDataFromStorage
+        );
         //localStorage.setItem("filteredMovies", JSON.stringify(filteredMovies));
         setFilteredMovies(filteredMovies);
       } else {
-        console.log('Im here')
-        const filteredSavedMovies = handleSearchFilter(searchQuery, savedMoviesDataFromStorage);
-        console.log(filteredSavedMovies)
+        console.log("Im here");
+        const filteredSavedMovies = handleSearchFilter(
+          searchQuery,
+          savedMoviesDataFromStorage
+        );
+        console.log(filteredSavedMovies);
       }
     }
   };
@@ -169,6 +191,52 @@ const App = () => {
     }
   }
 
+  const handleMovieDelete = (movie) => {
+     mainApi
+      .deleteMovie(movie.id)
+      .then((res) => {
+        if (res) {
+          setSavedMovies(savedMovies.filter((i) => i.id !== res.movieId))
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  function handleMovieLike(movie) {
+    console.log(movie)
+    // Снова проверяем, есть ли уже лайк на этой карточке
+    const isLiked = savedMovies.some((item) => item.id === movie.id);
+    // Отправляем запрос в API и получаем обновлённые данные карточки
+    console.log(isLiked)
+    if(!isLiked) {
+      mainApi
+        .postMovie(movie)
+        .then((movie) => {
+          setSavedMovies([...savedMovies, { ...movie, id: movie.movieId }]);
+          console.log(savedMovies, 'done');
+        })
+        .catch((err) => {
+          console.log(err); // выведем ошибку в консоль
+        });
+    } else {
+      mainApi
+        .postMovie(movie)
+        .then((movie) => {
+          setSavedMovies([...savedMovies, { ...movie, id: movie.movieId }]);
+          console.log(savedMovies, 'done');
+        })
+        .catch((err) => {
+          console.log(err); // выведем ошибку в консоль
+        });
+    }
+  }
+
+  function handleDelete() {
+    console.log('delete');
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <AppContext.Provider
@@ -180,13 +248,23 @@ const App = () => {
               <Main />
             </Route>
             <ProtectedRoute path="/movies">
-              <Movies movies={filteredMovies} onSearchMovies={handleSearchMovies} />
+              <Movies
+                movies={filteredMovies}
+                likedMovies={savedMovies}
+                onSearchMovies={handleSearchMovies}
+                handleMovieLike={handleMovieLike}
+                onCardDelete={handleMovieDelete}
+                onDelete={handleDelete}
+              />
             </ProtectedRoute>
             <ProtectedRoute path="/profile">
               <Profile onUpdateUser={handleUpdateUser} />
             </ProtectedRoute>
             <ProtectedRoute path="/saved-movies">
-              <SavedMovies savedMovies={savedMovies} onSearchMovies={handleSearchMovies} />
+              <SavedMovies
+                savedMovies={savedMovies}
+                onSearchMovies={handleSearchMovies}
+              />
             </ProtectedRoute>
             <Route path="/sign-up">
               <Register
