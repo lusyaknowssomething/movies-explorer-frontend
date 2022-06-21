@@ -22,8 +22,6 @@ const App = () => {
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [loggining, setLoggining] = React.useState({ loggedIn: false });
   const token = localStorage.getItem("token");
-  const [email, setEmail] = React.useState(null);
-  const [name, setName] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [filteredMovies, setFilteredMovies] = React.useState([]);
   const [getMovieError, setGetMovieError] = React.useState(null);
@@ -65,7 +63,7 @@ const App = () => {
       .getMovies()
       .then((movies) => {
         const savedMoviesData = movies.data.map((item) => {
-          return {...item};
+          return { ...item };
         });
         setSavedMovies(savedMoviesData);
         localStorage.setItem("savedMovies", JSON.stringify(savedMoviesData));
@@ -77,10 +75,17 @@ const App = () => {
       });
   };
 
-  // React.useEffect(() => {
-  //   setFilterSavedMovies(searchFilter(savedMovies, query));
-  //   localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
-  // }, [savedMovies]);
+  function signOut() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("movies");
+    localStorage.removeItem("savedMovies");
+    setMovies([]);
+    setSavedMovies([]);
+    history.push("/sign-in");
+    setLoggining({
+      loggedIn: false,
+    });
+  }
 
   React.useEffect(() => {
     if (loggining) {
@@ -88,10 +93,18 @@ const App = () => {
         .getUserData(token)
         .then((user) => {
           setCurrentUser(user);
-          if (!localStorage.movies) {
+          const moviesBeatFilm = JSON.parse(localStorage.getItem("movies"));
+          console.log(moviesBeatFilm)
+          if (moviesBeatFilm) {
+            setMovies(moviesBeatFilm);
+          } else {
             getMoviesFromBeatFilm();
           }
-          if (!localStorage.savedMovies) {
+          const savMovies = JSON.parse(localStorage.getItem("savedMovies"));
+          console.log(savMovies)
+          if (savMovies) {
+            setSavedMovies(savMovies);
+          } else {
             getSavedMovies();
           }
         })
@@ -99,7 +112,7 @@ const App = () => {
           console.log(err); // выведем ошибку в консоль
         });
     }
-  }, [loggining, token, ]);
+  }, [loggining, token]);
 
   const handleSearchFilter = (searchQuery, data) => {
     if (searchQuery) {
@@ -201,7 +214,8 @@ const App = () => {
       .deleteMovie(movie._id)
       .then((res) => {
         if (res) {
-          setSavedMovies(savedMovies.filter((i) => i.movieId !== res.movieId))
+          console.log(res)
+          setSavedMovies(savedMovies.filter((i) => i.movieId !== res.data.movieId));
           console.log(savedMovies);
           localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
         }
@@ -212,12 +226,12 @@ const App = () => {
   };
 
   function handleMovieLike(movie) {
-    console.log(movie)
+    console.log(movie);
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = savedMovies.some((item) => item.id === movie.id);
     // Отправляем запрос в API и получаем обновлённые данные карточки
-    console.log(isLiked)
-    if(!isLiked) {
+    console.log(isLiked);
+    if (!isLiked) {
       mainApi
         .postMovie(movie)
         .then((movie) => {
@@ -241,14 +255,12 @@ const App = () => {
   }
 
   function handleDelete() {
-    console.log('delete');
+    console.log("delete");
   }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <AppContext.Provider
-        value={{ loggedIn: loggining.loggedIn, email: email, name: name }}
-      >
+      <AppContext.Provider value={{ loggedIn: loggining.loggedIn }}>
         <div className="page">
           <Switch>
             <Route exact path="/">
@@ -265,7 +277,7 @@ const App = () => {
               />
             </ProtectedRoute>
             <ProtectedRoute path="/profile">
-              <Profile onUpdateUser={handleUpdateUser} />
+              <Profile onUpdateUser={handleUpdateUser} signOut={signOut} />
             </ProtectedRoute>
             <ProtectedRoute path="/saved-movies">
               <SavedMovies

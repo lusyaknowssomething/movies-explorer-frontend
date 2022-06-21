@@ -14,10 +14,6 @@ function SavedMovies({
 }) {
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const savedMoviesDataFromStorage = JSON.parse(
-    localStorage.getItem("savedMovies")
-  );
-
   return (
     <div className="container">
       <Header />
@@ -27,19 +23,11 @@ function SavedMovies({
           <Preloader />
         ) : (
           <>
-            {isLoading ? (
-              <MoviesCardList
-                moviesData={savedMovies}
-                handleMovieDelete={handleMovieDelete}
-                handleDelete={handleDelete}
-              />
-            ) : (
-              <MoviesCardList
-                moviesData={savedMoviesDataFromStorage}
-                handleMovieDelete={handleMovieDelete}
-                handleDelete={handleDelete}
-              />
-            )}
+            <MoviesCardList
+              moviesData={savedMovies}
+              handleMovieDelete={handleMovieDelete}
+              handleDelete={handleDelete}
+            />
           </>
         )}
       </main>

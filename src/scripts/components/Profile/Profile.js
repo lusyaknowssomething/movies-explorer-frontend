@@ -1,13 +1,9 @@
 import React from "react";
 import Header from "../Header/Header";
 import "./Profile.css";
-import { useHistory } from "react-router-dom";
-import AppContext from "../../../contexts/AppContext";
 import CurrentUserContext from "../../../contexts/CurrentUserContext";
 
-function Profile({ onUpdateUser }) {
-  const history = useHistory();
-  const value = React.useContext(AppContext);
+function Profile({ onUpdateUser, signOut }) {
   const currentUser = React.useContext(CurrentUserContext);
 
   const [state, setState] = React.useState({
@@ -24,13 +20,6 @@ function Profile({ onUpdateUser }) {
   };
 
 
-  function signOut(){
-    localStorage.removeItem('token');
-    localStorage.removeItem('movies');
-    localStorage.removeItem('savedMovies');
-    history.push('/sign-in');
-    value.loggedIn = false;
-  }
 
   function handleSubmit(e) {
     e.preventDefault();
