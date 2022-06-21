@@ -232,7 +232,7 @@ const App = () => {
         .postMovie(movie)
         .then((movie) => {
           setSavedMovies([...savedMovies, movie.data]);
-          localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+          localStorage.setItem("savedMovies", JSON.stringify([...savedMovies, movie.data]));
         })
         .catch((err) => {
           console.log(err); // выведем ошибку в консоль

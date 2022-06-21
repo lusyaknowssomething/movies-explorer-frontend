@@ -1,6 +1,7 @@
 import React from "react";
 import "./MoviesCard.css";
 import { useLocation } from "react-router-dom";
+import CurrentUserContext from "../../../contexts/CurrentUserContext";
 
 function MoviesCard({
   item,
@@ -9,6 +10,7 @@ function MoviesCard({
   handleMovieDelete,
   handleDelete,
 }) {
+  const currentUser = React.useContext(CurrentUserContext);
   const {
     //id,
     country,
@@ -24,19 +26,21 @@ function MoviesCard({
     isLiked,
   } = item;
 
-  // Определяем, сохранена ли карточка
-  const isSaved = (movie) => {
-    console.log(likedMovies);
-    likedMovies.some((item) => item.id === movie.id);
-  };
+  let isSaved;
+  const location = useLocation();
+  const savedMoviesPath = ["/saved-movies"].includes(location.pathname);
+  const moviesPath = ["/movies"].includes(location.pathname);
+
+  if (moviesPath) {
+    // Определяем, сохранена ли карточка
+    isSaved = likedMovies.some((i) => i.id === currentUser._id);
+    console.log(currentUser);
+  }
 
   // Создаём переменную, которую зададим в `className` для кнопки сохранить
   const cardLikeButtonClassName = `element__btn ${
     isSaved ? "element__btn_active" : ""
   }`;
-
-  const location = useLocation();
-  const savedMoviesPath = ["/saved-movies"].includes(location.pathname);
 
   function onMovieLike() {
     handleMovieLike(item);
