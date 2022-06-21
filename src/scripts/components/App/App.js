@@ -94,14 +94,12 @@ const App = () => {
         .then((user) => {
           setCurrentUser(user);
           const moviesBeatFilm = JSON.parse(localStorage.getItem("movies"));
-          console.log(moviesBeatFilm)
           if (moviesBeatFilm) {
             setMovies(moviesBeatFilm);
           } else {
             getMoviesFromBeatFilm();
           }
           const savMovies = JSON.parse(localStorage.getItem("savedMovies"));
-          console.log(savMovies)
           if (savMovies) {
             setSavedMovies(savMovies);
           } else {
@@ -214,9 +212,7 @@ const App = () => {
       .deleteMovie(movie._id)
       .then((res) => {
         if (res) {
-          console.log(res)
           setSavedMovies(savedMovies.filter((i) => i.movieId !== res.data.movieId));
-          console.log(savedMovies);
           localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
         }
       })
@@ -231,22 +227,24 @@ const App = () => {
     const isLiked = savedMovies.some((item) => item.id === movie.id);
     // Отправляем запрос в API и получаем обновлённые данные карточки
     console.log(isLiked);
-    if (!isLiked) {
+    if (isLiked) {
       mainApi
         .postMovie(movie)
         .then((movie) => {
-          setSavedMovies([...savedMovies, movie]);
+          setSavedMovies([...savedMovies, movie.data]);
           localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
-          console.log(savedMovies);
         })
         .catch((err) => {
           console.log(err); // выведем ошибку в консоль
         });
     } else {
       mainApi
-        .postMovie(movie)
-        .then((movie) => {
-          setSavedMovies([...savedMovies, { ...movie, id: movie.movieId }]);
+        .deleteMovie(movie._id)
+        .then((res) => {
+          if (res) {
+            setSavedMovies(savedMovies.filter((i) => i.movieId !== res.data.movieId));
+            localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+          }
         })
         .catch((err) => {
           console.log(err); // выведем ошибку в консоль
