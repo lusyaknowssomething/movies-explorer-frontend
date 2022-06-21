@@ -11,24 +11,24 @@ function SavedMovies({
   onSearchMovies,
   handleMovieDelete,
   handleDelete,
+  startPreloader,
+  noMoviesText,
 }) {
-  const [isLoading, setIsLoading] = React.useState(false);
-
   return (
     <div className="container">
       <Header />
       <main className="saved-movies page__saved-movies">
         <SearchForm onSearchMovies={onSearchMovies} />
-        {isLoading ? (
+        {startPreloader ? (
           <Preloader />
+        ) : !noMoviesText ? (
+          <MoviesCardList
+            moviesData={savedMovies}
+            handleMovieDelete={handleMovieDelete}
+            handleDelete={handleDelete}
+          />
         ) : (
-          <>
-            <MoviesCardList
-              moviesData={savedMovies}
-              handleMovieDelete={handleMovieDelete}
-              handleDelete={handleDelete}
-            />
-          </>
+          <div className="movies__not-found">{noMoviesText}</div>
         )}
       </main>
       <Footer />

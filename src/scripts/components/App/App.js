@@ -26,6 +26,7 @@ const App = () => {
   const [filteredMovies, setFilteredMovies] = React.useState([]);
   const [getMovieError, setGetMovieError] = React.useState(null);
   const [startPreloader, setStartPreloader] = React.useState(false);
+  const [noMoviesText, setNoMoviesText] = React.useState('');
 
   const getMoviesFromBeatFilm = () => {
     moviesApi
@@ -58,7 +59,6 @@ const App = () => {
   };
 
   const getSavedMovies = () => {
-    setStartPreloader(true);
     mainApi
       .getMovies()
       .then((movies) => {
@@ -128,6 +128,7 @@ const App = () => {
   };
 
   const handleSearchMovies = (searchQuery, isSavedMovies) => {
+    setStartPreloader(true);
     const moviesDataFromStorage = JSON.parse(localStorage.getItem("movies"));
     const savedMoviesDataFromStorage = JSON.parse(
       localStorage.getItem("savedMovies")
@@ -141,6 +142,13 @@ const App = () => {
         );
         //localStorage.setItem("filteredMovies", JSON.stringify(filteredMovies));
         setFilteredMovies(filteredMovies);
+        setStartPreloader(false);
+        if(filteredMovies.length === 0) {
+          setNoMoviesText('Ничего не найдено');
+        } else {
+          setNoMoviesText('');
+        }
+
       } else {
         console.log("Im here");
         const filteredSavedMovies = handleSearchFilter(
@@ -148,6 +156,7 @@ const App = () => {
           savedMoviesDataFromStorage
         );
         console.log(filteredSavedMovies);
+        setStartPreloader(false)
       }
     }
   };
@@ -271,6 +280,8 @@ const App = () => {
                 handleMovieLike={handleMovieLike}
                 handleMovieDelete={handleMovieDelete}
                 handleDelete={handleDelete}
+                startPreloader={startPreloader}
+                noMoviesText={noMoviesText}
               />
             </ProtectedRoute>
             <ProtectedRoute path="/profile">
@@ -282,6 +293,8 @@ const App = () => {
                 onSearchMovies={handleSearchMovies}
                 handleMovieDelete={handleMovieDelete}
                 handleDelete={handleDelete}
+                startPreloader={startPreloader}
+                noMoviesText={noMoviesText}
               />
             </ProtectedRoute>
             <Route path="/sign-up">

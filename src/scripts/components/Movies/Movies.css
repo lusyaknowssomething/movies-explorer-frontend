@@ -39,6 +39,15 @@
   transform: scale(0.95, 0.95);
 }
 
+.movies__not-found {
+  text-align: center;
+  margin-top: 20px;
+  color: #A0A0A0;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+}
 
 @media (max-width: 500px) {
   .movies {

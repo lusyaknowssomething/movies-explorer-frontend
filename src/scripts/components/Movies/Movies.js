@@ -6,19 +6,24 @@ import SearchForm from "../SearchForm/SearchForm";
 import Preloader from "../Preloader/Preloader";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 
-function Movies({ movies, likedMovies, onSearchMovies, handleMovieLike, handleMovieDelete, handleDelete }) {
-
-
-  const [isLoading, setIsLoading] = React.useState(false);
-
+function Movies({
+  movies,
+  likedMovies,
+  onSearchMovies,
+  handleMovieLike,
+  handleMovieDelete,
+  handleDelete,
+  startPreloader,
+  noMoviesText,
+}) {
   return (
     <div className="container">
       <Header />
       <main className="movies page__movies">
         <SearchForm onSearchMovies={onSearchMovies} />
-        {isLoading ? (
+        {startPreloader ? (
           <Preloader />
-        ) : (
+        ) : !noMoviesText ? (
           <>
             <MoviesCardList
               moviesData={movies}
@@ -31,6 +36,8 @@ function Movies({ movies, likedMovies, onSearchMovies, handleMovieLike, handleMo
               Ещё
             </button>
           </>
+        ) : (
+          <div className="movies__not-found">{noMoviesText}</div>
         )}
       </main>
       <Footer />
