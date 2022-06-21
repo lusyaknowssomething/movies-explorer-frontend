@@ -11,20 +11,8 @@ function MoviesCard({
   handleDelete,
 }) {
   const currentUser = React.useContext(CurrentUserContext);
-  const {
-    movieId,
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailerLink,
-    thumbnail,
-    nameRU,
-    nameEN,
-    isLiked,
-  } = item;
+
+  const duration = `${Math.trunc(item.duration / 60)}ч ${item.duration % 60}м`;
 
   let isSaved;
   const location = useLocation();
@@ -33,7 +21,7 @@ function MoviesCard({
 
   if (moviesPath) {
     // Определяем, сохранена ли карточка
-    isSaved = likedMovies.some((i) => Number(i.movieId) === movieId);
+    isSaved = likedMovies.some((i) => Number(i.movieId) === item.movieId);
   }
 
   // Создаём переменную, которую зададим в `className` для кнопки сохранить
@@ -50,9 +38,13 @@ function MoviesCard({
     handleMovieDelete(item);
   }
 
+  function openTrailer() {
+    window.open(item.trailerLink);
+  }
+
   return (
     <article className="element">
-      <h2 className="element__title">{nameRU}</h2>
+      <h2 className="element__title">{item.nameRU}</h2>
       <p className="element__time">{duration}</p>
       {savedMoviesPath ? (
         <button
@@ -68,7 +60,7 @@ function MoviesCard({
         ></button>
       )}
       <div className="element__pic-container">
-        <img src={image} alt={nameRU} className="element__picture" />
+        <img src={item.image} alt={item.nameRU} className="element__picture" onClick={openTrailer} />
       </div>
     </article>
   );
