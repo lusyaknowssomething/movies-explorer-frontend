@@ -222,12 +222,9 @@ const App = () => {
   };
 
   function handleMovieLike(movie) {
-    console.log(movie);
-    // Снова проверяем, есть ли уже лайк на этой карточке
-    const isLiked = savedMovies.some((item) => item.id === movie.id);
+    const isLiked = savedMovies.some((item) => Number(item.movieId) === movie.movieId);
     // Отправляем запрос в API и получаем обновлённые данные карточки
-    console.log(isLiked);
-    if (isLiked) {
+    if (!isLiked) {
       mainApi
         .postMovie(movie)
         .then((movie) => {
@@ -238,11 +235,12 @@ const App = () => {
           console.log(err); // выведем ошибку в консоль
         });
     } else {
+      const deletedMovie = savedMovies.filter((i) =>  Number(i.movieId) === movie.movieId);
       mainApi
-        .deleteMovie(movie._id)
+        .deleteMovie(deletedMovie[0]._id)
         .then((res) => {
           if (res) {
-            setSavedMovies(savedMovies.filter((i) => i.movieId !== res.data.movieId));
+            setSavedMovies(savedMovies.filter((i) =>  i.movieId !== res.data.movieId));
             localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
           }
         })
@@ -251,6 +249,7 @@ const App = () => {
         });
     }
   }
+
 
   function handleDelete() {
     console.log("delete");

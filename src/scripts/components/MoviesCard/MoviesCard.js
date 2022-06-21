@@ -12,7 +12,7 @@ function MoviesCard({
 }) {
   const currentUser = React.useContext(CurrentUserContext);
   const {
-    //id,
+    movieId,
     country,
     director,
     duration,
@@ -33,8 +33,7 @@ function MoviesCard({
 
   if (moviesPath) {
     // Определяем, сохранена ли карточка
-    isSaved = likedMovies.some((i) => i.id === currentUser._id);
-    console.log(currentUser);
+    isSaved = likedMovies.some((i) => Number(i.movieId) === movieId);
   }
 
   // Создаём переменную, которую зададим в `className` для кнопки сохранить
