@@ -24,18 +24,13 @@ function Movies({
         {startPreloader ? (
           <Preloader />
         ) : !noMoviesText ? (
-          <>
-            <MoviesCardList
-              moviesData={movies}
-              likedMovies={likedMovies}
-              handleMovieLike={handleMovieLike}
-              handleMovieDelete={handleMovieDelete}
-              handleDelete={handleDelete}
-            />
-            <button type="button" className="movies__btn">
-              Ещё
-            </button>
-          </>
+          <MoviesCardList
+            moviesData={movies}
+            likedMovies={likedMovies}
+            handleMovieLike={handleMovieLike}
+            handleMovieDelete={handleMovieDelete}
+            handleDelete={handleDelete}
+          />
         ) : (
           <div className="movies__not-found">{noMoviesText}</div>
         )}

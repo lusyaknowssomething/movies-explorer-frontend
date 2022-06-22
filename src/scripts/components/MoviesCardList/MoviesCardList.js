@@ -1,15 +1,50 @@
 import React from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
-import './MoviesCardList.css';
+import "./MoviesCardList.css";
 
-function MoviesCardList({ moviesData, likedMovies, handleMovieLike, handleMovieDelete, handleDelete }) {
-
+function MoviesCardList({
+  moviesData,
+  likedMovies,
+  handleMovieLike,
+  handleMovieDelete,
+  handleDelete,
+}) {
   const [movies, setMovies] = React.useState([]);
+  const [moviesOnPage, setMoviesOnPage] = React.useState(null);
+  const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
+
+  const resizeHandler = () => {
+    setWindowWidth(window.innerWidth);
+  }
 
   React.useEffect(() => {
-    setMovies(moviesData);
-    console.log(moviesData)
-  }, [moviesData]);
+    window.addEventListener('resize', resizeHandler);
+    if (windowWidth > 768) {
+      setMoviesOnPage(12);
+    } else if (windowWidth > 400) {
+      setMoviesOnPage(8);
+    } else {
+      setMoviesOnPage(5);
+    }
+
+    return () => {
+      window.removeEventListener('resize', resizeHandler);
+    };
+  }, [windowWidth]);
+
+  function handleMoreBtn() {
+    if (windowWidth > 768) {
+      setMoviesOnPage(moviesOnPage + 3);
+    } else if (windowWidth > 400) {
+      setMoviesOnPage(moviesOnPage + 2);
+    } else {
+      setMoviesOnPage(moviesOnPage + 2);
+    }
+  }
+
+  React.useEffect(() => {
+    setMovies(moviesData.slice(0, moviesOnPage));
+  }, [moviesData, moviesOnPage]);
 
   const moviesCards = movies.map((item) => (
     <MoviesCard
@@ -23,11 +58,14 @@ function MoviesCardList({ moviesData, likedMovies, handleMovieLike, handleMovieD
 
   return (
     <section className="cards-list" aria-label="Блок с карточками">
-      <div className="cards-list__container">
-        {moviesCards}
-      </div>
+      <div className="cards-list__container">{moviesCards}</div>
+      {moviesData.length > moviesOnPage ? (<button type="button" className="cards-list__btn" onClick={handleMoreBtn}>
+        Ещё
+      </button>) : (
+        <></>
+      )}
     </section>
   );
-};
+}
 
 export default MoviesCardList;
