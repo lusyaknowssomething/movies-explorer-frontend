@@ -16,13 +16,15 @@
   line-height: 15px;
   background-color: transparent;
   border: solid #E8E8E8 1px;
-  align-self: center;
   height: 36px;
   width: 320px;
   border-radius: 8px;
   cursor: pointer;
   transition: .4s;
   margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .cards-list__btn:hover {
