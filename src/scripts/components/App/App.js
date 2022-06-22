@@ -58,15 +58,43 @@ const App = () => {
       });
   };
 
+  // const getSavedMovies = () => {
+  //   mainApi
+  //     .getMovies()
+  //     .then((movies) => {
+  //       const savedMoviesData = movies.data.map((item) => {
+  //         return { ...item };
+  //       });
+  //       mainApi
+  //         .getUserData(token)
+  //         .then((user) => {
+  //           setSavedMovies(savedMoviesData.filter((i) => i.owner !== user._id));
+  //           localStorage.setItem("savedMovies", JSON.stringify(savedMoviesData));
+  //       })
+  //       console.log(savedMoviesData[0], currentUser._id);
+  //     })
+  //     .catch(() => {
+  //       setGetMovieError(
+  //         "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
+  //       );
+  //     });
+  // };
+
   const getSavedMovies = () => {
     mainApi
       .getMovies()
       .then((movies) => {
-        const savedMoviesData = movies.data.map((item) => {
+        return movies.data.map((item) => {
           return { ...item };
         });
-        setSavedMovies(savedMoviesData);
-        localStorage.setItem("savedMovies", JSON.stringify(savedMoviesData));
+      })
+      .then((savedMoviesData) => {
+        mainApi
+         .getUserData(token)
+            .then((user) => {
+              setSavedMovies(savedMoviesData.filter((i) => i.owner === user._id));
+              localStorage.setItem("savedMovies", JSON.stringify(savedMoviesData));
+            })
       })
       .catch(() => {
         setGetMovieError(

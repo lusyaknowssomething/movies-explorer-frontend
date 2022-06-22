@@ -12,9 +12,13 @@ function MoviesCardList({
   const [movies, setMovies] = React.useState([]);
   const [moviesOnPage, setMoviesOnPage] = React.useState(null);
   const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
+  const [time, setTime] = React.useState(0);
 
   const resizeHandler = () => {
-    setWindowWidth(window.innerWidth);
+    clearTimeout(time);
+    setTime(setTimeout(() => {
+      setWindowWidth(window.innerWidth);
+    }, 1000));
   }
 
   React.useEffect(() => {

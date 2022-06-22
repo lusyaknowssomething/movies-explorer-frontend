@@ -10,8 +10,8 @@ function MoviesCard({
   handleMovieDelete,
   handleDelete,
 }) {
-  const currentUser = React.useContext(CurrentUserContext);
-  const isOwn = item.owner === currentUser._id;
+  // const currentUser = React.useContext(CurrentUserContext);
+  // const isOwn = item.owner === currentUser._id;
 
   const duration = `${Math.trunc(item.duration / 60)}ч ${item.duration % 60}м`;
 
@@ -44,37 +44,26 @@ function MoviesCard({
   }
 
   return (
-    <>
-      {isOwn ? (
-        <article className="element">
-          <h2 className="element__title">{item.nameRU}</h2>
-          <p className="element__time">{duration}</p>
-          {savedMoviesPath ? (
-            <button
-              type="button"
-              className="element__btn element__btn_delete"
-              onClick={onDeleteClick}
-            ></button>
-          ) : (
-            <button
-              type="button"
-              className={cardLikeButtonClassName}
-              onClick={onMovieLike}
-            ></button>
-          )}
-          <div className="element__pic-container">
-            <img
-              src={item.image}
-              alt={item.nameRU}
-              className="element__picture"
-              onClick={openTrailer}
-            />
-          </div>
-        </article>
+    <article className="element">
+      <h2 className="element__title">{item.nameRU}</h2>
+      <p className="element__time">{duration}</p>
+      {savedMoviesPath ? (
+        <button
+          type="button"
+          className="element__btn element__btn_delete"
+          onClick={onDeleteClick}
+        ></button>
       ) : (
-        <></>
+        <button
+          type="button"
+          className={cardLikeButtonClassName}
+          onClick={onMovieLike}
+        ></button>
       )}
-    </>
+      <div className="element__pic-container">
+        <img src={item.image} alt={item.nameRU} className="element__picture" onClick={openTrailer} />
+      </div>
+    </article>
   );
 }
 
