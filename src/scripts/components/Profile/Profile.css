@@ -88,6 +88,11 @@
   transition: 0.4s;
 }
 
+.profile__button_disabled {
+  opacity: .7;
+  cursor: default;
+}
+
 .profile__button_exit {
   color: #FF3055;
 }

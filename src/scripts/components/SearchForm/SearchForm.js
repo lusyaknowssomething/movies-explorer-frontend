@@ -3,7 +3,7 @@ import "./SearchForm.css";
 import FindSvg from "../../../images/find.svg";
 import { useLocation } from 'react-router-dom';
 
-function SearchForm({ onSearchMovies }) {
+function SearchForm({ onSearchMovies, onFilter }) {
   const [state, setState] = React.useState({
     query: "",
   });
@@ -45,7 +45,7 @@ function SearchForm({ onSearchMovies }) {
         </button>
       </form>
       <div className="switcher">
-        <input type="checkbox" id="switcher" className="switcher__checkbox" />
+        <input type="checkbox" onClick={onFilter} id="switcher" className="switcher__checkbox" />
         <label for="switcher" className="switcher__button">
           <div className="switcher__circle"></div>
         </label>

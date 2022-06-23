@@ -25,9 +25,11 @@ const App = () => {
   const token = localStorage.getItem("token");
   const [isLoading, setIsLoading] = React.useState(false);
   const [filteredMovies, setFilteredMovies] = React.useState([]);
+  const [filteredSavedMovies, setFilteredSavedMovies] = React.useState([]);
   const [getMovieError, setGetMovieError] = React.useState(null);
   const [startPreloader, setStartPreloader] = React.useState(false);
   const [noMoviesText, setNoMoviesText] = React.useState("");
+  const [noSavedMoviesText, setNoSavedMoviesText] = React.useState("");
   const [infoTooltipPopupOpen, setInfoTooltipPopupOpen] = React.useState(null);
 
   const getMoviesFromBeatFilm = () => {
@@ -147,7 +149,6 @@ const App = () => {
           searchQuery,
           moviesDataFromStorage
         );
-        //localStorage.setItem("filteredMovies", JSON.stringify(filteredMovies));
         setFilteredMovies(filteredMovies);
         setStartPreloader(false);
         if (filteredMovies.length === 0) {
@@ -156,13 +157,18 @@ const App = () => {
           setNoMoviesText("");
         }
       } else {
-        console.log("Im here");
         const filteredSavedMovies = handleSearchFilter(
           searchQuery,
           savedMoviesDataFromStorage
         );
+        setFilteredSavedMovies(filteredSavedMovies);
         console.log(filteredSavedMovies);
         setStartPreloader(false);
+        if (filteredSavedMovies.length === 0) {
+          setNoSavedMoviesText("Ничего не найдено");
+        } else {
+          setNoSavedMoviesText("");
+        }
       }
     }
   };
@@ -184,7 +190,6 @@ const App = () => {
   }
 
   React.useEffect(() => {
-    console.log("here");
     tokenCheck();
   }, []);
 
@@ -307,6 +312,7 @@ const App = () => {
                 handleDelete={handleDelete}
                 startPreloader={startPreloader}
                 noMoviesText={noMoviesText}
+                getMovieError={getMovieError}
               />
             </ProtectedRoute>
             <ProtectedRoute path="/profile">
@@ -315,11 +321,13 @@ const App = () => {
             <ProtectedRoute path="/saved-movies">
               <SavedMovies
                 savedMovies={savedMovies}
+                filteredSavedMovies={filteredSavedMovies}
                 onSearchMovies={handleSearchMovies}
                 handleMovieDelete={handleMovieDelete}
                 handleDelete={handleDelete}
                 startPreloader={startPreloader}
-                noMoviesText={noMoviesText}
+                noSavedMoviesText={noSavedMoviesText}
+                getMovieError={getMovieError}
               />
             </ProtectedRoute>
             <Route path="/sign-up">

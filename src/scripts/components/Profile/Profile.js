@@ -51,14 +51,14 @@ function Profile({ onUpdateUser, signOut }) {
               />
             </label>
             <span
-                className={`${
-                  errors.name
-                    ? "profile__error_type_active"
-                    : "profile__error_type_hidden"
-                }`}
-              >
-                {errors.name}
-              </span>
+              className={`${
+                errors.name
+                  ? "profile__error_type_active"
+                  : "profile__error_type_hidden"
+              }`}
+            >
+              {errors.name}
+            </span>
             <label className="profile__label">
               E-mail
               <input
@@ -66,6 +66,7 @@ function Profile({ onUpdateUser, signOut }) {
                 name="email"
                 type="email"
                 defaultValue={currentUser.email}
+                pattern='^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
                 minLength="4"
                 maxLength="40"
                 onChange={handleChange}
@@ -73,16 +74,22 @@ function Profile({ onUpdateUser, signOut }) {
               />
             </label>
             <span
-                className={`${
-                  errors.email
-                    ? "profile__error_type_active"
-                    : "profile__error_type_hidden"
-                }`}
-              >
-                {errors.email}
-              </span>
+              className={`${
+                errors.email
+                  ? "profile__error_type_active"
+                  : "profile__error_type_hidden"
+              }`}
+            >
+              {errors.email}
+            </span>
             <div className="profile__btn-container">
-              <button className="profile__button" type="submit">
+              <button
+                className={`profile__button ${
+                  !isValid && "profile__button_disabled"
+                }`}
+                type="submit"
+                disabled={!isValid}
+              >
                 Редактировать
               </button>
               <button
