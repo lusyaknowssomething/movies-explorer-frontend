@@ -14,6 +14,7 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import mainApi from "../../utils/MainApi";
 import moviesApi from "../../utils/MoviesApi";
 import * as auth from "../../utils/auth";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 const App = () => {
   const history = useHistory();
@@ -26,7 +27,8 @@ const App = () => {
   const [filteredMovies, setFilteredMovies] = React.useState([]);
   const [getMovieError, setGetMovieError] = React.useState(null);
   const [startPreloader, setStartPreloader] = React.useState(false);
-  const [noMoviesText, setNoMoviesText] = React.useState('');
+  const [noMoviesText, setNoMoviesText] = React.useState("");
+  const [infoTooltipPopupOpen, setInfoTooltipPopupOpen] = React.useState(null);
 
   const getMoviesFromBeatFilm = () => {
     moviesApi
@@ -58,43 +60,20 @@ const App = () => {
       });
   };
 
-  // const getSavedMovies = () => {
-  //   mainApi
-  //     .getMovies()
-  //     .then((movies) => {
-  //       const savedMoviesData = movies.data.map((item) => {
-  //         return { ...item };
-  //       });
-  //       mainApi
-  //         .getUserData(token)
-  //         .then((user) => {
-  //           setSavedMovies(savedMoviesData.filter((i) => i.owner !== user._id));
-  //           localStorage.setItem("savedMovies", JSON.stringify(savedMoviesData));
-  //       })
-  //       console.log(savedMoviesData[0], currentUser._id);
-  //     })
-  //     .catch(() => {
-  //       setGetMovieError(
-  //         "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
-  //       );
-  //     });
-  // };
-
   const getSavedMovies = () => {
+    const tokenFromStorage = localStorage.getItem("token");
     mainApi
-      .getMovies()
+      .getMovies(tokenFromStorage)
       .then((movies) => {
         return movies.data.map((item) => {
           return { ...item };
         });
       })
       .then((savedMoviesData) => {
-        mainApi
-         .getUserData(token)
-            .then((user) => {
-              setSavedMovies(savedMoviesData.filter((i) => i.owner === user._id));
-              localStorage.setItem("savedMovies", JSON.stringify(savedMoviesData));
-            })
+        mainApi.getUserData(token).then((user) => {
+          setSavedMovies(savedMoviesData.filter((i) => i.owner === user._id));
+          localStorage.setItem("savedMovies", JSON.stringify(savedMoviesData));
+        });
       })
       .catch(() => {
         setGetMovieError(
@@ -171,12 +150,11 @@ const App = () => {
         //localStorage.setItem("filteredMovies", JSON.stringify(filteredMovies));
         setFilteredMovies(filteredMovies);
         setStartPreloader(false);
-        if(filteredMovies.length === 0) {
-          setNoMoviesText('Ничего не найдено');
+        if (filteredMovies.length === 0) {
+          setNoMoviesText("Ничего не найдено");
         } else {
-          setNoMoviesText('');
+          setNoMoviesText("");
         }
-
       } else {
         console.log("Im here");
         const filteredSavedMovies = handleSearchFilter(
@@ -184,7 +162,7 @@ const App = () => {
           savedMoviesDataFromStorage
         );
         console.log(filteredSavedMovies);
-        setStartPreloader(false)
+        setStartPreloader(false);
       }
     }
   };
@@ -206,13 +184,15 @@ const App = () => {
   }
 
   React.useEffect(() => {
+    console.log("here");
     tokenCheck();
   }, []);
 
   function handleUpdateUser(data) {
     setIsLoading(true);
+    const tokenFromStorage = localStorage.getItem("token");
     mainApi
-      .patchUserData(data)
+      .patchUserData(data, tokenFromStorage)
       .then(() => {
         currentUser.name = data.name;
         currentUser.email = data.email;
@@ -235,21 +215,25 @@ const App = () => {
 
   const [isSuccsess, setIsSuccsess] = React.useState(null);
 
-  function handleInfoTooltip(historyPush, register) {
+  function handleInfoTooltip(boolean, historyPush, register) {
     if (historyPush) {
       history.push("/sign-in");
     }
     if (register) {
       setLoggining(false);
     }
+    setInfoTooltipPopupOpen(boolean);
   }
 
   const handleMovieDelete = (movie) => {
+    const tokenFromStorage = localStorage.getItem("token");
     mainApi
-      .deleteMovie(movie._id)
+      .deleteMovie(movie._id, tokenFromStorage)
       .then((res) => {
         if (res) {
-          setSavedMovies(savedMovies.filter((i) => i.movieId !== res.data.movieId));
+          setSavedMovies(
+            savedMovies.filter((i) => i.movieId !== res.data.movieId)
+          );
           localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
         }
       })
@@ -259,25 +243,35 @@ const App = () => {
   };
 
   function handleMovieLike(movie) {
-    const isLiked = savedMovies.some((item) => Number(item.movieId) === movie.movieId);
+    const isLiked = savedMovies.some(
+      (item) => Number(item.movieId) === movie.movieId
+    );
+    const tokenFromStorage = localStorage.getItem("token");
     // Отправляем запрос в API и получаем обновлённые данные карточки
     if (!isLiked) {
       mainApi
-        .postMovie(movie)
+        .postMovie(movie, tokenFromStorage)
         .then((movie) => {
           setSavedMovies([...savedMovies, movie.data]);
-          localStorage.setItem("savedMovies", JSON.stringify([...savedMovies, movie.data]));
+          localStorage.setItem(
+            "savedMovies",
+            JSON.stringify([...savedMovies, movie.data])
+          );
         })
         .catch((err) => {
           console.log(err); // выведем ошибку в консоль
         });
     } else {
-      const deletedMovie = savedMovies.filter((i) =>  Number(i.movieId) === movie.movieId);
+      const deletedMovie = savedMovies.filter(
+        (i) => Number(i.movieId) === movie.movieId
+      );
       mainApi
-        .deleteMovie(deletedMovie[0]._id)
+        .deleteMovie(deletedMovie[0]._id, tokenFromStorage)
         .then((res) => {
           if (res) {
-            setSavedMovies(savedMovies.filter((i) =>  i.movieId !== res.data.movieId));
+            setSavedMovies(
+              savedMovies.filter((i) => i.movieId !== res.data.movieId)
+            );
             localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
           }
         })
@@ -287,9 +281,12 @@ const App = () => {
     }
   }
 
-
   function handleDelete() {
     console.log("delete");
+  }
+
+  function closePopup() {
+    setInfoTooltipPopupOpen(false);
   }
 
   return (
@@ -342,6 +339,11 @@ const App = () => {
               <NotFound />
             </Route>
           </Switch>
+          <InfoTooltip
+            onClose={closePopup}
+            register={infoTooltipPopupOpen}
+            isSuccsess={isSuccsess}
+          />
         </div>
       </AppContext.Provider>
     </CurrentUserContext.Provider>

@@ -10,8 +10,6 @@ function MoviesCard({
   handleMovieDelete,
   handleDelete,
 }) {
-  // const currentUser = React.useContext(CurrentUserContext);
-  // const isOwn = item.owner === currentUser._id;
 
   const duration = `${Math.trunc(item.duration / 60)}ч ${item.duration % 60}м`;
 
