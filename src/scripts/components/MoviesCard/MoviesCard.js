@@ -1,14 +1,12 @@
 import React from "react";
 import "./MoviesCard.css";
 import { useLocation } from "react-router-dom";
-import CurrentUserContext from "../../../contexts/CurrentUserContext";
 
 function MoviesCard({
   item,
   likedMovies,
   handleMovieLike,
   handleMovieDelete,
-  handleDelete,
 }) {
 
   const duration = `${Math.trunc(item.duration / 60)}ч ${item.duration % 60}м`;
@@ -33,7 +31,6 @@ function MoviesCard({
   }
 
   function onDeleteClick() {
-    handleDelete();
     handleMovieDelete(item);
   }
 

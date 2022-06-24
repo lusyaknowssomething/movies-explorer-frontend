@@ -7,7 +7,6 @@ function MoviesCardList({
   likedMovies,
   handleMovieLike,
   handleMovieDelete,
-  handleDelete,
 }) {
   const [movies, setMovies] = React.useState([]);
   const [moviesOnPage, setMoviesOnPage] = React.useState(null);
@@ -56,7 +55,6 @@ function MoviesCardList({
       likedMovies={likedMovies}
       handleMovieLike={handleMovieLike}
       handleMovieDelete={handleMovieDelete}
-      handleDelete={handleDelete}
     />
   ));
 

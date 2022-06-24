@@ -12,28 +12,25 @@ function Movies({
   onSearchMovies,
   handleMovieLike,
   handleMovieDelete,
-  handleDelete,
   startPreloader,
   noMoviesText,
   getMovieError,
 }) {
-
   const [filterDuration, setFilterDuration] = React.useState(false);
 
-  const handleFilterDuration = (movies) => movies.filter((i) => i.duration <= 40);
+  const handleFilterDuration = (movies) =>
+    movies.filter((i) => i.duration <= 40);
 
   const onFilter = () => {
     setFilterDuration(!filterDuration);
   };
 
-  let main
+  let main;
 
   if (startPreloader) {
-    main = <Preloader />
+    main = <Preloader />;
   } else if (getMovieError) {
-    main = <div>
-    {getMovieError}
-  </div>
+    main = <div>{getMovieError}</div>;
   } else {
     main = !noMoviesText ? (
       <MoviesCardList
@@ -41,18 +38,20 @@ function Movies({
         likedMovies={likedMovies}
         handleMovieLike={handleMovieLike}
         handleMovieDelete={handleMovieDelete}
-        handleDelete={handleDelete}
       />
     ) : (
       <div className="movies__not-found">{noMoviesText}</div>
-    )
+    );
   }
 
   return (
     <div className="container">
       <Header />
       <main className="movies page__movies">
-        <SearchForm onSearchMovies={onSearchMovies} onFilter={onFilter} />
+        <SearchForm
+          onSearchMovies={onSearchMovies}
+          onFilter={onFilter}
+        />
         {main}
       </main>
       <Footer />

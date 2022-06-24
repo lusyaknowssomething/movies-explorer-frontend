@@ -11,7 +11,6 @@ function SavedMovies({
   filteredSavedMovies,
   onSearchMovies,
   handleMovieDelete,
-  handleDelete,
   startPreloader,
   noSavedMoviesText,
   getMovieError,
@@ -46,7 +45,6 @@ function SavedMovies({
             : savedMovies
         }
         handleMovieDelete={handleMovieDelete}
-        handleDelete={handleDelete}
       />
     ) : (
       <div className="movies__not-found">{noSavedMoviesText}</div>
@@ -57,7 +55,10 @@ function SavedMovies({
     <div className="container">
       <Header />
       <main className="saved-movies page__saved-movies">
-        <SearchForm onSearchMovies={onSearchMovies} onFilter={onFilter} />
+        <SearchForm
+          onSearchMovies={onSearchMovies}
+          onFilter={onFilter}
+        />
         {main}
       </main>
       <Footer />

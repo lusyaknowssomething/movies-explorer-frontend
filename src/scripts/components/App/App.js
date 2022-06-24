@@ -31,36 +31,7 @@ const App = () => {
   const [noMoviesText, setNoMoviesText] = React.useState("");
   const [noSavedMoviesText, setNoSavedMoviesText] = React.useState("");
   const [infoTooltipPopupOpen, setInfoTooltipPopupOpen] = React.useState(null);
-
-  const getMoviesFromBeatFilm = () => {
-    moviesApi
-      .getMovies()
-      .then((movies) => {
-        const moviesFromBeatFilm = movies.map((item) => {
-          return {
-            movieId: item.id,
-            country: item.country,
-            director: item.director,
-            duration: item.duration,
-            year: item.year,
-            description: item.description,
-            image: `https://api.nomoreparties.co${item.image.url}`,
-            trailerLink: item.trailerLink,
-            thumbnail: `https://api.nomoreparties.co${item.image.formats.thumbnail.url}`,
-            nameRU: item.nameRU,
-            nameEN: item.nameEN,
-          };
-        });
-
-        localStorage.setItem("movies", JSON.stringify(moviesFromBeatFilm));
-        setMovies(moviesFromBeatFilm);
-      })
-      .catch(() => {
-        setGetMovieError(
-          "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
-        );
-      });
-  };
+  //const [searchQuery, setSearchQuery] = React.useState("");
 
   const getSavedMovies = () => {
     const tokenFromStorage = localStorage.getItem("token");
@@ -73,8 +44,9 @@ const App = () => {
       })
       .then((savedMoviesData) => {
         mainApi.getUserData(token).then((user) => {
-          setSavedMovies(savedMoviesData.filter((i) => i.owner === user._id));
-          localStorage.setItem("savedMovies", JSON.stringify(savedMoviesData));
+          const ownersMovies= savedMoviesData.filter((i) => i.owner === user._id)
+          setSavedMovies(ownersMovies);
+          localStorage.setItem("savedMovies", JSON.stringify(ownersMovies));
         });
       })
       .catch(() => {
@@ -88,6 +60,7 @@ const App = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("movies");
     localStorage.removeItem("savedMovies");
+    localStorage.removeItem("searchQuery");
     setMovies([]);
     setSavedMovies([]);
     history.push("/sign-in");
@@ -102,12 +75,6 @@ const App = () => {
         .getUserData(token)
         .then((user) => {
           setCurrentUser(user);
-          const moviesBeatFilm = JSON.parse(localStorage.getItem("movies"));
-          if (moviesBeatFilm) {
-            setMovies(moviesBeatFilm);
-          } else {
-            getMoviesFromBeatFilm();
-          }
           const savMovies = JSON.parse(localStorage.getItem("savedMovies"));
           if (savMovies) {
             setSavedMovies(savMovies);
@@ -136,41 +103,66 @@ const App = () => {
     }
   };
 
-  const handleSearchMovies = (searchQuery, isSavedMovies) => {
+  async function handleSearchMovies(searchName, isSavedMovies) {
     setStartPreloader(true);
-    const moviesDataFromStorage = JSON.parse(localStorage.getItem("movies"));
+    localStorage.setItem("searchQuery", searchName);
+    //setSearchQuery(searchName);
     const savedMoviesDataFromStorage = JSON.parse(
       localStorage.getItem("savedMovies")
     );
-
-    if (moviesDataFromStorage) {
-      if (!isSavedMovies) {
-        const filteredMovies = handleSearchFilter(
-          searchQuery,
-          moviesDataFromStorage
-        );
-        setFilteredMovies(filteredMovies);
-        setStartPreloader(false);
-        if (filteredMovies.length === 0) {
-          setNoMoviesText("Ничего не найдено");
+    moviesApi
+      .getMovies()
+      .then((movies) => {
+        const moviesFromBeatFilm = movies.map((item) => {
+          return {
+            movieId: item.id,
+            country: item.country,
+            director: item.director,
+            duration: item.duration,
+            year: item.year,
+            description: item.description,
+            image: `https://api.nomoreparties.co${item.image.url}`,
+            trailerLink: item.trailerLink,
+            thumbnail: `https://api.nomoreparties.co${item.image.formats.thumbnail.url}`,
+            nameRU: item.nameRU,
+            nameEN: item.nameEN,
+          };
+        });
+        localStorage.setItem("movies", JSON.stringify(moviesFromBeatFilm));
+        return moviesFromBeatFilm;
+      })
+      .then((data) => {
+        if (!isSavedMovies) {
+          const filteredMovies = handleSearchFilter(
+            searchName,
+            data
+          );
+          setFilteredMovies(filteredMovies);
+          setStartPreloader(false);
+          if (filteredMovies.length === 0) {
+            setNoMoviesText("Ничего не найдено");
+          } else {
+            setNoMoviesText("");
+          }
         } else {
-          setNoMoviesText("");
+          const filteredSavedMovies = handleSearchFilter(
+            searchName,
+            savedMoviesDataFromStorage
+          );
+          setFilteredSavedMovies(filteredSavedMovies);
+          setStartPreloader(false);
+          if (filteredSavedMovies.length === 0) {
+            setNoSavedMoviesText("Ничего не найдено");
+          } else {
+            setNoSavedMoviesText("");
+          }
         }
-      } else {
-        const filteredSavedMovies = handleSearchFilter(
-          searchQuery,
-          savedMoviesDataFromStorage
+      })
+      .catch(() => {
+        setGetMovieError(
+          "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
         );
-        setFilteredSavedMovies(filteredSavedMovies);
-        console.log(filteredSavedMovies);
-        setStartPreloader(false);
-        if (filteredSavedMovies.length === 0) {
-          setNoSavedMoviesText("Ничего не найдено");
-        } else {
-          setNoSavedMoviesText("");
-        }
-      }
-    }
+      });
   };
 
   function tokenCheck() {
@@ -286,10 +278,6 @@ const App = () => {
     }
   }
 
-  function handleDelete() {
-    console.log("delete");
-  }
-
   function closePopup() {
     setInfoTooltipPopupOpen(false);
   }
@@ -309,10 +297,10 @@ const App = () => {
                 onSearchMovies={handleSearchMovies}
                 handleMovieLike={handleMovieLike}
                 handleMovieDelete={handleMovieDelete}
-                handleDelete={handleDelete}
                 startPreloader={startPreloader}
                 noMoviesText={noMoviesText}
                 getMovieError={getMovieError}
+                searchQuery={'searchQuery'}
               />
             </ProtectedRoute>
             <ProtectedRoute path="/profile">
@@ -324,10 +312,10 @@ const App = () => {
                 filteredSavedMovies={filteredSavedMovies}
                 onSearchMovies={handleSearchMovies}
                 handleMovieDelete={handleMovieDelete}
-                handleDelete={handleDelete}
                 startPreloader={startPreloader}
                 noSavedMoviesText={noSavedMoviesText}
                 getMovieError={getMovieError}
+                searchQuery={'searchQuery'}
               />
             </ProtectedRoute>
             <Route path="/sign-up">
