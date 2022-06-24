@@ -31,7 +31,7 @@ const App = () => {
   const [noMoviesText, setNoMoviesText] = React.useState("");
   const [noSavedMoviesText, setNoSavedMoviesText] = React.useState("");
   const [infoTooltipPopupOpen, setInfoTooltipPopupOpen] = React.useState(null);
-  //const [searchQuery, setSearchQuery] = React.useState("");
+  const [searchQuery, setSearchQuery] = React.useState("");
 
   const getSavedMovies = () => {
     const tokenFromStorage = localStorage.getItem("token");
@@ -103,13 +103,15 @@ const App = () => {
     }
   };
 
-  async function handleSearchMovies(searchName, isSavedMovies) {
+  async function handleSearchMovies(searchName, isSavedMovies, filterDurationMovies, filterDurationSavedMovies) {
     setStartPreloader(true);
-    localStorage.setItem("searchQuery", searchName);
-    //setSearchQuery(searchName);
+    setSearchQuery(searchName);
     const savedMoviesDataFromStorage = JSON.parse(
       localStorage.getItem("savedMovies")
     );
+    localStorage.setItem('searchQuery', searchName);
+    localStorage.setItem('filterDurationMovies', filterDurationMovies);
+    localStorage.setItem('filterDurationSavedMovies', filterDurationSavedMovies);
     moviesApi
       .getMovies()
       .then((movies) => {
@@ -300,7 +302,6 @@ const App = () => {
                 startPreloader={startPreloader}
                 noMoviesText={noMoviesText}
                 getMovieError={getMovieError}
-                searchQuery={'searchQuery'}
               />
             </ProtectedRoute>
             <ProtectedRoute path="/profile">
@@ -315,7 +316,6 @@ const App = () => {
                 startPreloader={startPreloader}
                 noSavedMoviesText={noSavedMoviesText}
                 getMovieError={getMovieError}
-                searchQuery={'searchQuery'}
               />
             </ProtectedRoute>
             <Route path="/sign-up">

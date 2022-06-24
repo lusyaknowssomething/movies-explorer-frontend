@@ -15,13 +15,22 @@ function SavedMovies({
   noSavedMoviesText,
   getMovieError,
 }) {
+
+  const filterDurationSavedMovies = localStorage.getItem("filterDurationSavedMovies");
   const [filterDuration, setFilterDuration] = React.useState(false);
+
+  React.useEffect(() => {
+    if (filterDurationSavedMovies) {
+      setFilterDuration(filterDurationSavedMovies)
+    }
+  }, []);
 
   const handleFilterDuration = (movies) =>
     movies.filter((i) => i.duration <= 40);
 
   const onFilter = () => {
     setFilterDuration(!filterDuration);
+    localStorage.setItem('filterDurationSavedMovies', !filterDuration);
   };
 
   let main;
@@ -55,10 +64,7 @@ function SavedMovies({
     <div className="container">
       <Header />
       <main className="saved-movies page__saved-movies">
-        <SearchForm
-          onSearchMovies={onSearchMovies}
-          onFilter={onFilter}
-        />
+        <SearchForm onSearchMovies={onSearchMovies} onFilter={onFilter} filterDuration={filterDuration}/>
         {main}
       </main>
       <Footer />

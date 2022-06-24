@@ -3,8 +3,17 @@ import "./SearchForm.css";
 import FindSvg from "../../../images/find.svg";
 import { useLocation } from 'react-router-dom';
 
-function SearchForm({ onSearchMovies, onFilter }) {
+function SearchForm({ onSearchMovies, onFilter, filterDuration }) {
   const [query, setQuery] = React.useState('');
+
+  const searchQuery = localStorage.getItem("searchQuery");
+
+  React.useEffect(() => {
+    if (searchQuery && location.pathname === "/movies") {
+      setQuery(searchQuery);
+      const filterDurationFromStorage= localStorage.getItem('filterDurationMovies')
+    }
+  }, []);
 
   const location = useLocation();
   const isSavedMovies = ['/saved-movies'].includes(location.pathname);
@@ -16,7 +25,7 @@ function SearchForm({ onSearchMovies, onFilter }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if(!query) return;
-    onSearchMovies(query, isSavedMovies);
+    onSearchMovies(query, isSavedMovies, filterDuration);
   };
 
 
@@ -37,7 +46,7 @@ function SearchForm({ onSearchMovies, onFilter }) {
         </button>
       </form>
       <div className="switcher">
-        <input type="checkbox" onClick={onFilter} id="switcher" className="switcher__checkbox" />
+        <input type="checkbox" checked={filterDuration} onClick={onFilter} id="switcher" className="switcher__checkbox" />
         <label for="switcher" className="switcher__button">
           <div className="switcher__circle"></div>
         </label>
