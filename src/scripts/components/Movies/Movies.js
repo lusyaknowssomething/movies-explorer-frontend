@@ -7,7 +7,6 @@ import Preloader from "../Preloader/Preloader";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 
 function Movies({
-  movies,
   likedMovies,
   onSearchMovies,
   handleMovieLike,
@@ -22,9 +21,7 @@ function Movies({
   const [filterDuration, setFilterDuration] = React.useState(false);
 
   React.useEffect(() => {
-    console.log("try")
     const filterDurationMovies = localStorage.getItem("filterDurationMovies");
-    console.log(typeof filterDurationMovies)
     if (filterDurationMovies === 'true') {
       setFilterDuration(true);
     }

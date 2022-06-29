@@ -15,17 +15,22 @@ import mainApi from "../../utils/MainApi";
 import moviesApi from "../../utils/MoviesApi";
 import * as auth from "../../utils/auth";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
+import {
+  GET_MOVIE_ERROR,
+  NO_SAVED_MOVIES_TEXT,
+  BEAT_FILM_URL,
+  UPDATE_USER_SUCCESS,
+  LOG_IN_SUCCSESS
+} from "../../utils/constants";
 
 const App = () => {
   const location = useLocation();
   const history = useHistory();
   const [currentUser, setCurrentUser] = React.useState([]);
-  const [movies, setMovies] = React.useState([]);
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [loggining, setLoggining] = React.useState({ loggedIn: false });
   const token = localStorage.getItem("token");
   const [isLoading, setIsLoading] = React.useState(false);
-  const [filteredMovies, setFilteredMovies] = React.useState([]);
   const [filteredSavedMovies, setFilteredSavedMovies] = React.useState([]);
   const [getMovieError, setGetMovieError] = React.useState(null);
   const [startPreloader, setStartPreloader] = React.useState(false);
@@ -33,7 +38,6 @@ const App = () => {
   const [noSavedMoviesText, setNoSavedMoviesText] = React.useState("");
   const [infoTooltipPopupOpen, setInfoTooltipPopupOpen] = React.useState(null);
   const [infoToolTipText, setInfoToolTipText] = React.useState("");
-  const [searchQuery, setSearchQuery] = React.useState("");
 
   const getSavedMovies = () => {
     const tokenFromStorage = localStorage.getItem("token");
@@ -52,15 +56,12 @@ const App = () => {
         });
       })
       .catch(() => {
-        setGetMovieError(
-          "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
-        );
+        setGetMovieError(GET_MOVIE_ERROR);
       });
   };
 
   function signOut() {
     localStorage.clear();
-    setMovies([]);
     setSavedMovies([]);
     history.push("/");
     setLoggining({
@@ -105,7 +106,6 @@ const App = () => {
   async function handleSearchMovies(searchName, isSavedMovies) {
     setIsLoading(true);
     setStartPreloader(true);
-    setSearchQuery(searchName);
     const savedMoviesDataFromStorage = JSON.parse(
       localStorage.getItem("savedMovies")
     );
@@ -121,9 +121,9 @@ const App = () => {
             duration: item.duration,
             year: item.year,
             description: item.description,
-            image: `https://api.nomoreparties.co${item.image.url}`,
+            image: `${BEAT_FILM_URL}${item.image.url}`,
             trailerLink: item.trailerLink,
-            thumbnail: `https://api.nomoreparties.co${item.image.formats.thumbnail.url}`,
+            thumbnail: `${BEAT_FILM_URL}${item.image.formats.thumbnail.url}`,
             nameRU: item.nameRU,
             nameEN: item.nameEN,
           };
@@ -137,12 +137,10 @@ const App = () => {
             searchName,
             data
           );
-
-          setFilteredMovies(filteredMovies);
           setStartPreloader(false);
           localStorage.setItem("filteredMovies", JSON.stringify(filteredMovies));
           if (filteredMovies.length === 0) {
-            setNoMoviesText("Ничего не найдено");
+            setNoMoviesText(NO_SAVED_MOVIES_TEXT);
           } else {
             setNoMoviesText("");
           }
@@ -155,7 +153,7 @@ const App = () => {
           setFilteredSavedMovies(filteredSavedMovies);
           setStartPreloader(false);
           if (filteredSavedMovies.length === 0) {
-            setNoSavedMoviesText("Ничего не найдено");
+            setNoSavedMoviesText(NO_SAVED_MOVIES_TEXT);
           } else {
             setNoSavedMoviesText("");
           }
@@ -163,9 +161,7 @@ const App = () => {
         }
       })
       .catch(() => {
-        setGetMovieError(
-          "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
-        );
+        setGetMovieError(GET_MOVIE_ERROR);
       });
   };
 
@@ -190,6 +186,10 @@ const App = () => {
 
   React.useEffect(() => {
     tokenCheck();
+    console.log('work');
+    localStorage.removeItem('filterDurationMovies');
+    localStorage.removeItem('searchQuery');
+    localStorage.removeItem('filteredMovies');
   }, []);
 
   function handleUpdateUser(data) {
@@ -202,7 +202,7 @@ const App = () => {
         currentUser.email = data.email;
         setInfoTooltipPopupOpen(true);
         setIsSuccsess(true);
-        setInfoToolTipText('Информация о пользователе успешно обновлена.');
+        setInfoToolTipText(UPDATE_USER_SUCCESS);
       })
       .catch((err) => {
         setInfoTooltipPopupOpen(true);
@@ -234,7 +234,7 @@ const App = () => {
         }
         setInfoTooltipPopupOpen(true);
         setIsSuccsess(true);
-        setInfoToolTipText('Вход произведен успешно.');
+        setInfoToolTipText(LOG_IN_SUCCSESS);
         return data.token;
       })
       .then((token) => {
@@ -319,7 +319,6 @@ const App = () => {
             </Route>
             <ProtectedRoute exact path="/movies">
               <Movies
-                movies={filteredMovies}
                 likedMovies={savedMovies}
                 onSearchMovies={handleSearchMovies}
                 handleMovieLike={handleMovieLike}

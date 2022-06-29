@@ -5,6 +5,7 @@ import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import "./SavedMovies.css";
 import Preloader from "../Preloader/Preloader";
+import { DURATION } from "../../utils/constants";
 
 function SavedMovies({
   savedMovies,
@@ -32,7 +33,7 @@ function SavedMovies({
   }, [filterDuration, filteredSavedMovies]);
 
   const handleFilterDuration = (moviesData) =>
-    moviesData.filter((i) => i.duration <= 40);
+    moviesData.filter((i) => i.duration <= DURATION);
 
   const onFilter = () => {
     setFilterDuration(!filterDuration);
