@@ -186,7 +186,6 @@ const App = () => {
 
   React.useEffect(() => {
     tokenCheck();
-    console.log('work');
     localStorage.removeItem('filterDurationMovies');
     localStorage.removeItem('searchQuery');
     localStorage.removeItem('filteredMovies');
@@ -259,6 +258,8 @@ const App = () => {
         if (res) {
           const newSavedMovies = savedMovies.filter((i) => i.movieId !== res.data.movieId);
           setSavedMovies(newSavedMovies);
+          console.log("here");
+          console.log(newSavedMovies)
           localStorage.setItem("savedMovies", JSON.stringify(newSavedMovies));
         }
       })

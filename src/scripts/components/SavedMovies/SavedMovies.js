@@ -30,7 +30,7 @@ function SavedMovies({
     setMoviesOnPage(filteredSavedMovies.length > 0
       ? filteredSavedMovies
       : savedMovies)
-  }, [filterDuration, filteredSavedMovies]);
+  }, [filterDuration, filteredSavedMovies, savedMovies]);
 
   const handleFilterDuration = (moviesData) =>
     moviesData.filter((i) => i.duration <= DURATION);
