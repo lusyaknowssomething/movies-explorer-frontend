@@ -18,19 +18,21 @@ function SavedMovies({
 }) {
 
   const [filterDuration, setFilterDuration] = React.useState(false);
-  // const [filteredMovies, setFilteredMovies] = React.useState(null);
+  const [moviesOnPage, setMoviesOnPage] = React.useState([]);
   React.useEffect(() => {
+    console.log('here')
+
     filteredSavedMovies.length = 0;
+    setMoviesOnPage(savedMovies);
   }, []);
 
-  // React.useEffect(() => {
-  //   setFilteredMovies(null);
-  //   console.log(savedMovies);
-  //   const filterDurationSavedMovies = localStorage.getItem("filterDurationSavedMovies");
-  //   if (filterDurationSavedMovies) {
-  //     setFilterDuration(filterDurationSavedMovies)
-  //   }
-  // }, []);
+
+  React.useEffect(() => {
+    console.log('Imhere')
+    setMoviesOnPage(filteredSavedMovies.length > 0
+      ? filteredSavedMovies
+      : savedMovies)
+  }, [filterDuration, filteredSavedMovies]);
 
   const handleFilterDuration = (moviesData) =>
     moviesData.filter((i) => i.duration <= 40);
@@ -54,14 +56,8 @@ function SavedMovies({
       <MoviesCardList
         moviesData={
           filterDuration
-            ? handleFilterDuration(
-                filteredSavedMovies.length > 0
-                  ? filteredSavedMovies
-                  : savedMovies
-              )
-            : filteredSavedMovies.length > 0
-            ? filteredSavedMovies
-            : savedMovies
+            ? handleFilterDuration(moviesOnPage)
+            : moviesOnPage
         }
         handleMovieDelete={handleMovieDelete}
       />
