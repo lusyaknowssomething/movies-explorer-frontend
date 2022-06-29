@@ -6,7 +6,7 @@ const ProtectedRoute = ({ children  }) => {
   const value = React.useContext(AppContext);
   return value.loggedIn
   ? children
-  : <Redirect to="./sign-in" />
+  : <Redirect to="./" />
 }
 
 export default ProtectedRoute;

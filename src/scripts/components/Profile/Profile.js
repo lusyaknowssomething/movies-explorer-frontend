@@ -4,30 +4,32 @@ import "./Profile.css";
 import CurrentUserContext from "../../../contexts/CurrentUserContext";
 import { useFormWithValidation } from "../../utils/validation";
 
-function Profile({ onUpdateUser, signOut }) {
+function Profile({ onUpdateUser, signOut, isLoading }) {
   const currentUser = React.useContext(CurrentUserContext);
+  const [formIsValid, setFormIsValid] = React.useState(true);
 
   const { values, handleChange, errors, isValid, resetForm } =
     useFormWithValidation();
+
+    React.useEffect(() => {
+      if (currentUser.name === values.name || currentUser.email === values.email) {
+        setFormIsValid(false);
+      }
+    }, [currentUser, values])
 
   React.useEffect(() => {
     resetForm();
   }, [resetForm]);
 
-  // const [state, setState] = React.useState({
-  //   name: currentUser.name,
-  //   email: currentUser.email,
-  // });
-
   function handleSubmit(e) {
     e.preventDefault();
-
     // Передаём значения управляемых компонентов во внешний обработчик
     onUpdateUser({
       name: values.name,
       email: values.email,
     });
   }
+
 
   return (
     <>
@@ -48,6 +50,7 @@ function Profile({ onUpdateUser, signOut }) {
                 pattern="^[a-zA-Zа-яёА-ЯЁ\s\-]+$"
                 required
                 defaultValue={currentUser.name}
+                disabled={isLoading}
               />
             </label>
             <span
@@ -71,6 +74,7 @@ function Profile({ onUpdateUser, signOut }) {
                 maxLength="40"
                 onChange={handleChange}
                 required
+                disabled={isLoading}
               />
             </label>
             <span
@@ -84,11 +88,9 @@ function Profile({ onUpdateUser, signOut }) {
             </span>
             <div className="profile__btn-container">
               <button
-                className={`profile__button ${
-                  !isValid && "profile__button_disabled"
-                }`}
+                className="profile__button"
                 type="submit"
-                disabled={!isValid}
+                disabled={!isValid || !formIsValid}
               >
                 Редактировать
               </button>

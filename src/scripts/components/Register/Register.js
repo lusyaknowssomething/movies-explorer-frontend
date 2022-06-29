@@ -5,9 +5,8 @@ import Logo from "../../../images/logo.svg";
 import * as auth from "../../utils/auth";
 import { useFormWithValidation } from "../../utils/validation";
 
-function Register({ handleInfoTooltip, setIsSuccsess }) {
-  const { values, handleChange, errors, isValid, resetForm } =
-    useFormWithValidation();
+function Register({ handleSignIn, setIsSuccsess, setInfoTooltipPopupOpen }) {
+  const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
 
   React.useEffect(() => {
     resetForm();
@@ -18,12 +17,11 @@ function Register({ handleInfoTooltip, setIsSuccsess }) {
     auth
       .register(values.name, values.email, values.password)
       .then(() => {
-        handleInfoTooltip(true, true);
-        setIsSuccsess(true);
+        handleSignIn(values.email, values.password)
       })
       .catch((err) => {
         console.log(err);
-        handleInfoTooltip(true, false, true);
+        setInfoTooltipPopupOpen(true);
         setIsSuccsess(false);
       });
   };

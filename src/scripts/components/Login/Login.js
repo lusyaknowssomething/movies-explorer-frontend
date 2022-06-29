@@ -1,11 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../../images/logo.svg";
-import * as auth from "../../utils/auth";
-import mainApi from "../../utils/MainApi";
 import { useFormWithValidation } from "../../utils/validation";
 
-function Login({ handleLogin, handleInfoTooltip, setIsSuccsess }) {
+function Login({ handleSignIn }) {
   const { values, handleChange, errors, isValid, resetForm } =
     useFormWithValidation();
 
@@ -15,28 +13,7 @@ function Login({ handleLogin, handleInfoTooltip, setIsSuccsess }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    auth
-      .authorize(values.password, values.email)
-      .then((data) => {
-        if (!data.token){
-          handleInfoTooltip(true, false);
-          setIsSuccsess(false)
-          return;
-        }
-        return data.token;
-      })
-      .then((token) => {
-        mainApi
-          .getUserData(token)
-            .then((data) => {
-              handleLogin(token, data);
-            })
-      })
-      .catch((err) => {
-        handleInfoTooltip(true, false);
-        setIsSuccsess(false);
-        console.log(err);
-      });
+    handleSignIn(values.email, values.password)
   };
 
   return (

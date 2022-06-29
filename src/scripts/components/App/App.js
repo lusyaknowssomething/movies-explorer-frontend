@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import Main from "../Main/Main";
@@ -17,6 +17,7 @@ import * as auth from "../../utils/auth";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 const App = () => {
+  const location = useLocation();
   const history = useHistory();
   const [currentUser, setCurrentUser] = React.useState([]);
   const [movies, setMovies] = React.useState([]);
@@ -31,6 +32,7 @@ const App = () => {
   const [noMoviesText, setNoMoviesText] = React.useState("");
   const [noSavedMoviesText, setNoSavedMoviesText] = React.useState("");
   const [infoTooltipPopupOpen, setInfoTooltipPopupOpen] = React.useState(null);
+  const [infoToolTipText, setInfoToolTipText] = React.useState("");
   const [searchQuery, setSearchQuery] = React.useState("");
 
   const getSavedMovies = () => {
@@ -57,13 +59,10 @@ const App = () => {
   };
 
   function signOut() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("movies");
-    localStorage.removeItem("savedMovies");
-    localStorage.removeItem("searchQuery");
+    localStorage.clear();
     setMovies([]);
     setSavedMovies([]);
-    history.push("/sign-in");
+    history.push("/");
     setLoggining({
       loggedIn: false,
     });
@@ -103,15 +102,14 @@ const App = () => {
     }
   };
 
-  async function handleSearchMovies(searchName, isSavedMovies, filterDurationMovies, filterDurationSavedMovies) {
+  async function handleSearchMovies(searchName, isSavedMovies) {
+    setIsLoading(true);
     setStartPreloader(true);
     setSearchQuery(searchName);
     const savedMoviesDataFromStorage = JSON.parse(
       localStorage.getItem("savedMovies")
     );
-    localStorage.setItem('searchQuery', searchName);
-    localStorage.setItem('filterDurationMovies', filterDurationMovies);
-    localStorage.setItem('filterDurationSavedMovies', filterDurationSavedMovies);
+
     moviesApi
       .getMovies()
       .then((movies) => {
@@ -139,13 +137,16 @@ const App = () => {
             searchName,
             data
           );
+
           setFilteredMovies(filteredMovies);
           setStartPreloader(false);
+          localStorage.setItem("filteredMovies", JSON.stringify(filteredMovies));
           if (filteredMovies.length === 0) {
             setNoMoviesText("Ничего не найдено");
           } else {
             setNoMoviesText("");
           }
+          setIsLoading(false);
         } else {
           const filteredSavedMovies = handleSearchFilter(
             searchName,
@@ -158,6 +159,7 @@ const App = () => {
           } else {
             setNoSavedMoviesText("");
           }
+          setIsLoading(false);
         }
       })
       .catch(() => {
@@ -178,7 +180,10 @@ const App = () => {
         setLoggining({
           loggedIn: true,
         });
-        history.push("/movies");
+        history.push(location.pathname);
+        if(["/sign-in"].includes(location.pathname) || ["/sign-up"].includes(location.pathname)){
+          history.push("/movies")
+        }
       })
       .catch((res) => console.log(res));
   }
@@ -195,8 +200,13 @@ const App = () => {
       .then(() => {
         currentUser.name = data.name;
         currentUser.email = data.email;
+        setInfoTooltipPopupOpen(true);
+        setIsSuccsess(true);
+        setInfoToolTipText('Информация о пользователе успешно обновлена.');
       })
       .catch((err) => {
+        setInfoTooltipPopupOpen(true);
+        setIsSuccsess(false);
         console.log(err); // выведем ошибку в консоль
       })
       .finally(() => {
@@ -214,15 +224,32 @@ const App = () => {
 
   const [isSuccsess, setIsSuccsess] = React.useState(null);
 
-  function handleInfoTooltip(boolean, historyPush, register) {
-    if (historyPush) {
-      history.push("/sign-in");
-    }
-    if (register) {
-      setLoggining(false);
-    }
-    setInfoTooltipPopupOpen(boolean);
-  }
+  const handleSignIn = (email, password) => {
+    auth
+      .authorize(password, email)
+      .then((data) => {
+        if (!data.token){
+          setIsSuccsess(false)
+          return;
+        }
+        setInfoTooltipPopupOpen(true);
+        setIsSuccsess(true);
+        setInfoToolTipText('Вход произведен успешно.');
+        return data.token;
+      })
+      .then((token) => {
+        mainApi
+          .getUserData(token)
+            .then((data) => {
+              handleLogin(token, data);
+            })
+      })
+      .catch((err) => {
+        setInfoTooltipPopupOpen(true);
+        setIsSuccsess(false);
+        console.log(err);
+      });
+  };
 
   const handleMovieDelete = (movie) => {
     const tokenFromStorage = localStorage.getItem("token");
@@ -230,10 +257,9 @@ const App = () => {
       .deleteMovie(movie._id, tokenFromStorage)
       .then((res) => {
         if (res) {
-          setSavedMovies(
-            savedMovies.filter((i) => i.movieId !== res.data.movieId)
-          );
-          localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+          const newSavedMovies = savedMovies.filter((i) => i.movieId !== res.data.movieId);
+          setSavedMovies(newSavedMovies);
+          localStorage.setItem("savedMovies", JSON.stringify(newSavedMovies));
         }
       })
       .catch((err) => {
@@ -268,10 +294,9 @@ const App = () => {
         .deleteMovie(deletedMovie[0]._id, tokenFromStorage)
         .then((res) => {
           if (res) {
-            setSavedMovies(
-              savedMovies.filter((i) => i.movieId !== res.data.movieId)
-            );
-            localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+            const newSavedMovies = savedMovies.filter((i) => i.movieId !== res.data.movieId);
+            setSavedMovies(newSavedMovies);
+            localStorage.setItem("savedMovies", JSON.stringify(newSavedMovies));
           }
         })
         .catch((err) => {
@@ -292,7 +317,7 @@ const App = () => {
             <Route exact path="/">
               <Main />
             </Route>
-            <ProtectedRoute path="/movies">
+            <ProtectedRoute exact path="/movies">
               <Movies
                 movies={filteredMovies}
                 likedMovies={savedMovies}
@@ -302,12 +327,13 @@ const App = () => {
                 startPreloader={startPreloader}
                 noMoviesText={noMoviesText}
                 getMovieError={getMovieError}
+                isLoading={isLoading}
               />
             </ProtectedRoute>
-            <ProtectedRoute path="/profile">
-              <Profile onUpdateUser={handleUpdateUser} signOut={signOut} />
+            <ProtectedRoute exact path="/profile">
+              <Profile onUpdateUser={handleUpdateUser} signOut={signOut} isLoading={isLoading}/>
             </ProtectedRoute>
-            <ProtectedRoute path="/saved-movies">
+            <ProtectedRoute exact path="/saved-movies">
               <SavedMovies
                 savedMovies={savedMovies}
                 filteredSavedMovies={filteredSavedMovies}
@@ -316,19 +342,19 @@ const App = () => {
                 startPreloader={startPreloader}
                 noSavedMoviesText={noSavedMoviesText}
                 getMovieError={getMovieError}
+                isLoading={isLoading}
               />
             </ProtectedRoute>
             <Route path="/sign-up">
               <Register
-                handleInfoTooltip={handleInfoTooltip}
+                handleSignIn={handleSignIn}
                 setIsSuccsess={setIsSuccsess}
+                setInfoTooltipPopupOpen={setInfoTooltipPopupOpen}
               />
             </Route>
             <Route path="/sign-in">
               <Login
-                handleLogin={handleLogin}
-                handleInfoTooltip={handleInfoTooltip}
-                setIsSuccsess={setIsSuccsess}
+                handleSignIn={handleSignIn}
               />
             </Route>
             <Route exact path="*">
@@ -339,6 +365,7 @@ const App = () => {
             onClose={closePopup}
             register={infoTooltipPopupOpen}
             isSuccsess={isSuccsess}
+            infoToolTipText={infoToolTipText}
           />
         </div>
       </AppContext.Provider>

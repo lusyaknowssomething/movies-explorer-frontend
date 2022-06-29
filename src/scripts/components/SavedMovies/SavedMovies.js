@@ -14,24 +14,34 @@ function SavedMovies({
   startPreloader,
   noSavedMoviesText,
   getMovieError,
+  isLoading,
 }) {
 
-  const filterDurationSavedMovies = localStorage.getItem("filterDurationSavedMovies");
   const [filterDuration, setFilterDuration] = React.useState(false);
-
+  // const [filteredMovies, setFilteredMovies] = React.useState(null);
   React.useEffect(() => {
-    if (filterDurationSavedMovies) {
-      setFilterDuration(filterDurationSavedMovies)
-    }
+    filteredSavedMovies.length = 0;
   }, []);
 
-  const handleFilterDuration = (movies) =>
-    movies.filter((i) => i.duration <= 40);
+  // React.useEffect(() => {
+  //   setFilteredMovies(null);
+  //   console.log(savedMovies);
+  //   const filterDurationSavedMovies = localStorage.getItem("filterDurationSavedMovies");
+  //   if (filterDurationSavedMovies) {
+  //     setFilterDuration(filterDurationSavedMovies)
+  //   }
+  // }, []);
+
+  const handleFilterDuration = (moviesData) =>
+    moviesData.filter((i) => i.duration <= 40);
 
   const onFilter = () => {
     setFilterDuration(!filterDuration);
-    localStorage.setItem('filterDurationSavedMovies', !filterDuration);
   };
+
+  const handleSearchMovies = (query, isSavedMovies) => {
+    onSearchMovies(query, isSavedMovies);
+  }
 
   let main;
 
@@ -64,7 +74,7 @@ function SavedMovies({
     <div className="container">
       <Header />
       <main className="saved-movies page__saved-movies">
-        <SearchForm onSearchMovies={onSearchMovies} onFilter={onFilter} filterDuration={filterDuration}/>
+        <SearchForm onSearchMovies={handleSearchMovies} onFilter={onFilter} filterDuration={filterDuration} isLoading={isLoading}/>
         {main}
       </main>
       <Footer />

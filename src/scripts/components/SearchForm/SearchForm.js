@@ -3,15 +3,15 @@ import "./SearchForm.css";
 import FindSvg from "../../../images/find.svg";
 import { useLocation } from 'react-router-dom';
 
-function SearchForm({ onSearchMovies, onFilter, filterDuration }) {
+function SearchForm({ onSearchMovies, onFilter, filterDuration, isLoading }) {
   const [query, setQuery] = React.useState('');
 
-  const searchQuery = localStorage.getItem("searchQuery");
 
   React.useEffect(() => {
+    const searchQuery = localStorage.getItem("searchQuery");
     if (searchQuery && location.pathname === "/movies") {
       setQuery(searchQuery);
-      const filterDurationFromStorage= localStorage.getItem('filterDurationMovies')
+      console.log(filterDuration);
     }
   }, []);
 
@@ -25,7 +25,10 @@ function SearchForm({ onSearchMovies, onFilter, filterDuration }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if(!query) return;
-    onSearchMovies(query, isSavedMovies, filterDuration);
+    onSearchMovies(query, isSavedMovies);
+    if(location.pathname === "/movies") {
+      localStorage.setItem('searchQuery', query);
+    }
   };
 
 
@@ -40,13 +43,14 @@ function SearchForm({ onSearchMovies, onFilter, filterDuration }) {
           name="query"
           value={query}
           onChange={handleChange}
+          disabled={isLoading}
         />
         <button className="search__button" type="submit">
           <img className="search__icon" src={FindSvg} alt="find-icon" />
         </button>
       </form>
       <div className="switcher">
-        <input type="checkbox" checked={filterDuration} onClick={onFilter} id="switcher" className="switcher__checkbox" />
+        <input type="checkbox" onClick={onFilter} checked={filterDuration} id="switcher" className="switcher__checkbox" />
         <label for="switcher" className="switcher__button">
           <div className="switcher__circle"></div>
         </label>
