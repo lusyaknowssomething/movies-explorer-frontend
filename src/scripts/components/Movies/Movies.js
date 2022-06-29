@@ -17,24 +17,41 @@ function Movies({
   getMovieError,
   isLoading,
 }) {
+  //const [moviesOnPage, setMoviesOnPage] = React.useState([]);
   const filteredMovies = JSON.parse(localStorage.getItem("filteredMovies"));
-
   const [filterDuration, setFilterDuration] = React.useState(false);
 
   React.useEffect(() => {
+    console.log("try")
     const filterDurationMovies = localStorage.getItem("filterDurationMovies");
-    //console.log(filterDurationMovies);
-    if (filterDurationMovies) {
-      setFilterDuration(filterDurationMovies);
+    console.log(typeof filterDurationMovies)
+    if (filterDurationMovies === 'true') {
+      console.log('here')
+      setFilterDuration(true);
     }
+    // console.log(filterDurationMovies);
+    // if (filterDurationMovies) {
+    //   setFilterDuration(filterDurationMovies);
+    //   console.log(handleFilterDuration(filteredMovies));
+    //   setMoviesOnPage(handleFilterDuration(filteredMovies))
+    // }
   }, []);
 
+  // React.useEffect(() => {
+  //   if (filteredMovies) {
+  //     setMoviesOnPage(
+  //       filterDuration === true
+  //         ? handleFilterDuration(filteredMovies)
+  //         : filteredMovies
+  //     );
+  //   }
+  // }, [filterDuration, filteredMovies]);
+
   const handleFilterDuration = (moviesData) =>
-  moviesData.filter((i) => i.duration <= 40);
+    moviesData.filter((i) => i.duration <= 40);
 
   const onFilter = () => {
     setFilterDuration(!filterDuration);
-    console.log(filterDuration);
     localStorage.setItem("filterDurationMovies", !filterDuration);
   };
 
@@ -48,34 +65,17 @@ function Movies({
     main = <Preloader />;
   } else if (getMovieError) {
     main = <div>{getMovieError}</div>;
-  } else {
-    if (filteredMovies) {
-      main = !noMoviesText ? (
-        <MoviesCardList
-          moviesData={
-            filterDuration === true
-              ? handleFilterDuration(filteredMovies)
-              : filteredMovies
-          }
-          likedMovies={likedMovies}
-          handleMovieLike={handleMovieLike}
-          handleMovieDelete={handleMovieDelete}
-        />
-      ) : (
-        <div className="movies__not-found">{noMoviesText}</div>
-      );
-    } else {
-      main = !noMoviesText ? (
-        <MoviesCardList
-          moviesData={filterDuration === true ? handleFilterDuration(movies) : movies}
-          likedMovies={likedMovies}
-          handleMovieLike={handleMovieLike}
-          handleMovieDelete={handleMovieDelete}
-        />
-      ) : (
-        <div className="movies__not-found">{noMoviesText}</div>
-      );
-    }
+  } else if (filteredMovies){
+    main = !noMoviesText ? (
+      <MoviesCardList
+        moviesData={filterDuration === true ? handleFilterDuration(filteredMovies) : filteredMovies}
+        likedMovies={likedMovies}
+        handleMovieLike={handleMovieLike}
+        handleMovieDelete={handleMovieDelete}
+      />
+    ) : (
+      <div className="movies__not-found">{noMoviesText}</div>
+    );
   }
 
   return (

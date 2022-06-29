@@ -20,15 +20,12 @@ function SavedMovies({
   const [filterDuration, setFilterDuration] = React.useState(false);
   const [moviesOnPage, setMoviesOnPage] = React.useState([]);
   React.useEffect(() => {
-    console.log('here')
-
     filteredSavedMovies.length = 0;
     setMoviesOnPage(savedMovies);
   }, []);
 
 
   React.useEffect(() => {
-    console.log('Imhere')
     setMoviesOnPage(filteredSavedMovies.length > 0
       ? filteredSavedMovies
       : savedMovies)
