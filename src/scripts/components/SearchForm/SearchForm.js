@@ -11,7 +11,6 @@ function SearchForm({ onSearchMovies, onFilter, filterDuration, isLoading }) {
     const searchQuery = localStorage.getItem("searchQuery");
     if (searchQuery && location.pathname === "/movies") {
       setQuery(searchQuery);
-      console.log(filterDuration);
     }
   }, []);
 

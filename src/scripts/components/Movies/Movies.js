@@ -17,7 +17,7 @@ function Movies({
   getMovieError,
   isLoading,
 }) {
-  //const [moviesOnPage, setMoviesOnPage] = React.useState([]);
+
   const filteredMovies = JSON.parse(localStorage.getItem("filteredMovies"));
   const [filterDuration, setFilterDuration] = React.useState(false);
 
@@ -26,26 +26,9 @@ function Movies({
     const filterDurationMovies = localStorage.getItem("filterDurationMovies");
     console.log(typeof filterDurationMovies)
     if (filterDurationMovies === 'true') {
-      console.log('here')
       setFilterDuration(true);
     }
-    // console.log(filterDurationMovies);
-    // if (filterDurationMovies) {
-    //   setFilterDuration(filterDurationMovies);
-    //   console.log(handleFilterDuration(filteredMovies));
-    //   setMoviesOnPage(handleFilterDuration(filteredMovies))
-    // }
   }, []);
-
-  // React.useEffect(() => {
-  //   if (filteredMovies) {
-  //     setMoviesOnPage(
-  //       filterDuration === true
-  //         ? handleFilterDuration(filteredMovies)
-  //         : filteredMovies
-  //     );
-  //   }
-  // }, [filterDuration, filteredMovies]);
 
   const handleFilterDuration = (moviesData) =>
     moviesData.filter((i) => i.duration <= 40);
