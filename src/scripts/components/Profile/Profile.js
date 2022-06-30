@@ -8,14 +8,30 @@ function Profile({ onUpdateUser, signOut, isLoading }) {
   const currentUser = React.useContext(CurrentUserContext);
   const [formIsValid, setFormIsValid] = React.useState(true);
 
-  const { values, handleChange, errors, isValid, resetForm } =
-    useFormWithValidation();
+  const {
+    values,
+    handleChange,
+    errors,
+    isValid,
+    resetForm,
+  } = useFormWithValidation();
 
-    React.useEffect(() => {
-      if (currentUser.name === values.name || currentUser.email === values.email) {
-        setFormIsValid(false);
-      }
-    }, [currentUser, values])
+  React.useEffect(() => {
+    if (
+      (currentUser.name === values.name &&
+        currentUser.email === values.email) ||
+      (currentUser.name === values.name && values.email === undefined) ||
+      (currentUser.email === values.email && values.name === undefined)
+    ) {
+      setFormIsValid(false);
+    } else {
+      setFormIsValid(true);
+    }
+  }, [currentUser, values]);
+
+  React.useEffect(() => {
+    resetForm();
+  }, [resetForm]);
 
   React.useEffect(() => {
     resetForm();
@@ -29,7 +45,6 @@ function Profile({ onUpdateUser, signOut, isLoading }) {
       email: values.email,
     });
   }
-
 
   return (
     <>

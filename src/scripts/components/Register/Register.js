@@ -5,7 +5,7 @@ import Logo from "../../../images/logo.svg";
 import * as auth from "../../utils/auth";
 import { useFormWithValidation } from "../../utils/validation";
 
-function Register({ handleSignIn, setIsSuccsess, setInfoTooltipPopupOpen }) {
+function Register({ handleSignIn, setIsSuccsess, setInfoTooltipPopupOpen, isLoading }) {
   const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
 
   React.useEffect(() => {
@@ -49,6 +49,7 @@ function Register({ handleSignIn, setIsSuccsess, setInfoTooltipPopupOpen }) {
               onChange={handleChange}
               pattern="^[a-zA-Zа-яёА-ЯЁ\s\-]+$"
               required
+              disabled={isLoading}
             />
             <span
               className={`${
@@ -71,6 +72,7 @@ function Register({ handleSignIn, setIsSuccsess, setInfoTooltipPopupOpen }) {
               onChange={handleChange}
               pattern='^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
               required
+              disabled={isLoading}
             />
             <span
               className={`${
@@ -94,6 +96,7 @@ function Register({ handleSignIn, setIsSuccsess, setInfoTooltipPopupOpen }) {
               pattern="((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
               required
               autocomplete="new-password"
+              disabled={isLoading}
             />
             <span
               className={`${

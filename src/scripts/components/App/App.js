@@ -186,9 +186,6 @@ const App = () => {
 
   React.useEffect(() => {
     tokenCheck();
-    localStorage.removeItem('filterDurationMovies');
-    localStorage.removeItem('searchQuery');
-    localStorage.removeItem('filteredMovies');
   }, []);
 
   function handleUpdateUser(data) {
@@ -224,6 +221,7 @@ const App = () => {
   const [isSuccsess, setIsSuccsess] = React.useState(null);
 
   const handleSignIn = (email, password) => {
+    setIsLoading(true);
     auth
       .authorize(password, email)
       .then((data) => {
@@ -247,6 +245,9 @@ const App = () => {
         setInfoTooltipPopupOpen(true);
         setIsSuccsess(false);
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -350,11 +351,12 @@ const App = () => {
                 handleSignIn={handleSignIn}
                 setIsSuccsess={setIsSuccsess}
                 setInfoTooltipPopupOpen={setInfoTooltipPopupOpen}
+                isLoading={isLoading}
               />
             </Route>
             <Route path="/sign-in">
               <Login
-                handleSignIn={handleSignIn}
+                handleSignIn={handleSignIn} isLoading={isLoading}
               />
             </Route>
             <Route exact path="*">

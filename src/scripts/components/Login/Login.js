@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Logo from "../../../images/logo.svg";
 import { useFormWithValidation } from "../../utils/validation";
 
-function Login({ handleSignIn }) {
+function Login({ handleSignIn, isLoading }) {
   const { values, handleChange, errors, isValid, resetForm } =
     useFormWithValidation();
 
@@ -39,6 +39,7 @@ function Login({ handleSignIn }) {
               onChange={handleChange}
               pattern='^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
               required
+              disabled={isLoading}
             />
             <span
               className={`${
@@ -61,6 +62,7 @@ function Login({ handleSignIn }) {
               onChange={handleChange}
               pattern="((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
               required
+              disabled={isLoading}
             />
             <span
               className={`${
