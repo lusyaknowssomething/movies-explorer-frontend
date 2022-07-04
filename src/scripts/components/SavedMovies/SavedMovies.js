@@ -5,43 +5,71 @@ import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import "./SavedMovies.css";
 import Preloader from "../Preloader/Preloader";
-import Img1 from "../../../images/img1.jpg";
-import Img2 from "../../../images/img2.jpg";
-import Img3 from "../../../images/img3.jpg";
+import { DURATION } from "../../utils/constants";
 
-function SavedMovies() {
-  const savedMoviesData = [
-    {
-      name: "33 слова о дизайне",
-      time: "1ч 47м",
-      img: Img1,
-    },
-    {
-      name: "33 слова о дизайне",
-      time: "1ч 47м",
-      img: Img2,
-    },
-    {
-      name: "33 слова о дизайне",
-      time: "1ч 47м",
-      img: Img3,
-    },
-  ];
+function SavedMovies({
+  savedMovies,
+  filteredSavedMovies,
+  onSearchMovies,
+  handleMovieDelete,
+  startPreloader,
+  noSavedMoviesText,
+  getMovieError,
+  isLoading,
+}) {
 
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [filterDuration, setFilterDuration] = React.useState(false);
+  const [moviesOnPage, setMoviesOnPage] = React.useState([]);
+  React.useEffect(() => {
+    filteredSavedMovies.length = 0;
+    setMoviesOnPage(savedMovies);
+  }, []);
+
+
+  React.useEffect(() => {
+    setMoviesOnPage(filteredSavedMovies.length > 0
+      ? filteredSavedMovies
+      : savedMovies)
+  }, [filterDuration, filteredSavedMovies, savedMovies]);
+
+  const handleFilterDuration = (moviesData) =>
+    moviesData.filter((i) => i.duration <= DURATION);
+
+  const onFilter = () => {
+    setFilterDuration(!filterDuration);
+  };
+
+  const handleSearchMovies = (query, isSavedMovies) => {
+    onSearchMovies(query, isSavedMovies);
+  }
+
+  let main;
+
+  if (startPreloader) {
+    main = <Preloader />;
+  } else if (getMovieError) {
+    main = <div>{getMovieError}</div>;
+  } else {
+    main = !noSavedMoviesText ? (
+      <MoviesCardList
+        moviesData={
+          filterDuration
+            ? handleFilterDuration(moviesOnPage)
+            : moviesOnPage
+        }
+        handleMovieDelete={handleMovieDelete}
+      />
+    ) : (
+      <div className="movies__not-found">{noSavedMoviesText}</div>
+    );
+  }
 
   return (
     <div className="container">
       <Header />
       <main className="saved-movies page__saved-movies">
-        <SearchForm />
-        {isLoading ? (
-          <Preloader />
-        ) : (
-          <>
-            <MoviesCardList moviesData={savedMoviesData} />
-          </>
-        )}
+        <SearchForm onSearchMovies={handleSearchMovies} onFilter={onFilter} filterDuration={filterDuration} isLoading={isLoading}/>
+        {main}
       </main>
       <Footer />
     </div>

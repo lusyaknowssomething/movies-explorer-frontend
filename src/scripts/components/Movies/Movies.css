@@ -14,31 +14,15 @@
   min-height: calc(100vh - 144px - 172px);
 }
 
-.movies__btn {
+.movies__not-found {
+  text-align: center;
+  margin-top: 20px;
+  color: #A0A0A0;
   font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 15px;
-  background-color: transparent;
-  border: solid #E8E8E8 1px;
-  align-self: center;
-  height: 36px;
-  width: 320px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: .4s;
-  margin-top: 50px;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
 }
-
-.movies__btn:hover {
-  background-color:#f5f5f5;
-  border: solid #d3d3d3 1px;
-}
-
-.movies__btn:active {
-  transform: scale(0.95, 0.95);
-}
-
 
 @media (max-width: 500px) {
   .movies {
