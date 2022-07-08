@@ -39,10 +39,11 @@ function Profile({ onUpdateUser, signOut, isLoading }) {
 
   function handleSubmit(e) {
     e.preventDefault();
+
     // Передаём значения управляемых компонентов во внешний обработчик
     onUpdateUser({
-      name: values.name,
-      email: values.email,
+      name: values.name === undefined ? currentUser.name : values.name,
+      email: values.email === undefined ? currentUser.email : values.email,
     });
   }
 
